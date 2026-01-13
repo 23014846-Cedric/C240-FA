@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OfferUp Coach</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>OfferUp Coach</h1>
+        <p class="tagline">Practice interviews, get feedback, and draft negotiation scripts.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Interview practice section -->
+      <section id="interview-practice" aria-labelledby="practice-heading">
+        <h2 id="practice-heading">Interview Practice</h2>
+
+        <div class="question-area">
+          <button id="prev-q" aria-label="Previous question">◀</button>
+          <div class="question-card">
+            <h3 id="question-text">Loading question...</h3>
+            <p class="hint">Tip: Use STAR (Situation, Task, Action, Result)</p>
+          </div>
+          <button id="next-q" aria-label="Next question">▶</button>
+        </div>
+
+        <label for="answer" class="sr-only">Your answer</label>
+        <textarea id="answer" placeholder="Type your answer here..." rows="6"></textarea>
+        <div class="controls">
+          <button id="submit-answer">Get Feedback</button>
+          <button id="save-answer">Save Locally</button>
+        </div>
+
+        <div id="feedback" aria-live="polite" class="feedback">
+          <h4>Feedback</h4>
+          <ul id="feedback-list"></ul>
+        </div>
+      </section>
+
+      <!-- Negotiation helper section -->
+      <section id="negotiation" aria-labelledby="neg-heading">
+        <h2 id="neg-heading">Negotiation Script Generator</h2>
+        <form id="neg-form">
+          <label>
+            Your name
+            <input type="text" id="neg-name" placeholder="Alex" />
+          </label>
+          <label>
+            Role / Title
+            <input type="text" id="neg-role" placeholder="Product Designer" />
+          </label>
+          <label>
+            Company
+            <input type="text" id="neg-company" placeholder="Acme Corp" />
+          </label>
+          <label>
+            Current / Offered Salary
+            <input type="text" id="neg-salary" placeholder="$85,000" />
+          </label>
+          <div class="controls">
+            <button id="generate-neg" type="button">Generate Script</button>
+            <button id="copy-neg" type="button">Copy</button>
+          </div>
+        </form>
+
+        <pre id="neg-output" class="neg-output" aria-live="polite">Your negotiation script will appear here.</pre>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">Built for students & young professionals — OfferUp Coach</div>
+    </footer>
+
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
