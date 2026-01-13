@@ -28,6 +28,8 @@ const feedbackList = document.getElementById('feedback-list');
 const genNeg = document.getElementById('generate-neg');
 const copyNeg = document.getElementById('copy-neg');
 const negOutput = document.getElementById('neg-output');
+const negTone = document.getElementById('neg-tone');
+const negDesired = document.getElementById('neg-desired');
 
 function renderQuestion() {
   qText.textContent = sampleQuestions[currentIndex];
@@ -148,11 +150,54 @@ genNeg.addEventListener('click', () => {
   const name = document.getElementById('neg-name').value.trim() || 'Your name';
   const role = document.getElementById('neg-role').value.trim() || 'Role';
   const company = document.getElementById('neg-company').value.trim() || 'Company';
-  const salary = document.getElementById('neg-salary').value.trim() || 'the offered salary';
+  const offeredRaw = document.getElementById('neg-salary').value.trim();
+  const desiredRaw = negDesired.value.trim();
+  const tone = negTone.value || 'professional';
 
-  const email = `Hi ${company} team,\n\nThank you again for the ${role} offer. I’m excited about the opportunity and the team. Based on my research and the responsibilities of the role, I’m seeking ${salary} to reflect the scope and my experience. Is there flexibility to discuss compensation or additional benefits?\n\nI’d appreciate the chance to discuss this further — thank you for considering.\n\nBest,\n${name}`;
+  function parseSalary(s) {
+    if (!s) return null;
+    // remove currency/commas
+    const num = Number(s.replace(/[^0-9.]/g, ''));
+    return Number.isFinite(num) ? num : null;
+  }
 
-  const talkingPoints = `Key talking points:\n- Express gratitude and enthusiasm.\n- State target compensation clearly: ${salary}.\n- Highlight brief reasons (experience, scope, market data).\n- Ask about flexibility and other benefits.`;
+  function formatSalary(n) {
+    if (n == null) return '';
+    return '$' + n.toLocaleString(undefined, {maximumFractionDigits:0});
+  }
+
+  const offered = parseSalary(offeredRaw);
+  const desired = parseSalary(desiredRaw);
+
+  // compute suggested target: prefer explicit desired, else +10% of offered
+  let suggested = desired || (offered ? Math.round(offered * 1.10) : null);
+
+  // tone-aware templates
+  const templates = {
+    professional: {
+      subject: `Regarding the ${role} offer`,
+      opener: `Hi ${company} team,\n\nThank you for the ${role} offer and for the time you've spent with me during the interview process. I’m excited about the opportunity and the team.`,
+      body: suggested ? `Based on the responsibilities and market research, I’m targeting ${formatSalary(suggested)}. Would you be open to discussing compensation or benefits to bridge to that range?` : `I’d appreciate the chance to discuss compensation and the full package.`,
+      closer: `Thank you for considering — I’m happy to discuss further.\n\nBest regards,\n${name}`
+    },
+    friendly: {
+      subject: `Quick note about the ${role} offer`,
+      opener: `Hi ${company} team,\n\nThanks so much for the offer — I’m really excited about the role and the people I met.`,
+      body: suggested ? `I’d be hoping for around ${formatSalary(suggested)} given the scope and my experience. Is there room to discuss salary or extra benefits to get closer to that?` : `Would love to chat about the compensation and any other parts of the package.`,
+      closer: `Appreciate your time — looking forward to hearing from you.\n\nThanks,\n${name}`
+    },
+    direct: {
+      subject: `Salary discussion for ${role} offer`,
+      opener: `Hello ${company} team,\n\nThank you for the offer. I’m interested in moving forward, but want to confirm compensation expectations.`,
+      body: suggested ? `I am targeting ${formatSalary(suggested)} based on market data and my experience. Please let me know if that is feasible or what flexibility exists.` : `Please let me know what flexibility exists in the compensation package.`,
+      closer: `Regards,\n${name}`
+    }
+  };
+
+  const t = templates[tone] || templates.professional;
+  const email = `${t.subject}\n\n${t.opener}\n\n${t.body}\n\n${t.closer}`;
+
+  const talkingPoints = `Talking points:\n- Thank them and express enthusiasm.\n- State target (${suggested ? formatSalary(suggested) : 'state your target clearly'}).\n- Brief rationale: experience, scope, market data.\n- Ask about flexibility, alternatives (signing bonus, equity, vacation).`;
 
   negOutput.textContent = email + '\n\n' + talkingPoints;
 });
