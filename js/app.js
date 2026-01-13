@@ -6,7 +6,11 @@ const sampleQuestions = [
   "Tell me about a time you disagreed with a teammate. How did you handle it?",
   "Walk me through a project you led from concept to delivery.",
   "How do you prioritize tasks when everything feels urgent?",
-  "Why are you interested in this role at our company?"
+  "Why are you interested in this role at our company?",
+  "Describe a time you used data to make a decision — what was the outcome?",
+  "Tell me about a challenge you faced and how you resolved it.",
+  "How do you handle feedback and change your approach?",
+  "Give an example of when you had to learn a new skill quickly."
 ];
 
 let currentIndex = 0;
@@ -44,11 +48,20 @@ nextBtn.addEventListener('click', () => {
 function analyzeAnswer(text) {
   const tips = [];
   const len = text.trim().length;
-  if (len < 50) tips.push('Answer is short — add specific details or metrics.');
-  if (!text.match(/\b(I|we)\b/i)) tips.push('Consider using first-person language to show ownership.');
-  if (text.match(/\b(um|uh|like|you know)\b/i)) tips.push('Reduce filler words (um, uh, like). Practice pausing.');
-  if (!text.match(/\b(result|impact|outcome|deliverable)\b/i)) tips.push('Try to state the result / impact (quantify when possible).');
-  tips.push('Structure answers using STAR: Situation, Task, Action, Result.');
+  if (len < 40) tips.push('Answer is short — add concrete details or metrics (try 60-120 words).');
+  if (len > 600) tips.push('Answer is very long — aim for concise storytelling (1–2 minutes spoken).');
+  if (!text.match(/\b(I|we)\b/i)) tips.push('Use first-person language to show ownership (I, we).');
+  if (text.match(/\b(um|uh|like|you know|so\s+basically)\b/i)) tips.push('Reduce filler words (um, uh, like); practice pausing to emphasize points.');
+  if (!text.match(/\b(result|impact|outcome|deliverable|saved|reduced|increased|improved)\b/i)) tips.push('State the result/impact and, when possible, add numbers or percentages.');
+  const hasSTAR = /situation|task|action|result/i.test(text);
+  if (!hasSTAR) tips.push('Try structuring the answer with STAR: Situation, Task, Action, Result.');
+  if (!text.match(/\d{2,}|%|\$|k\b/i)) {
+    tips.push('If possible, include specific metrics (e.g., "reduced time by 30%" or "saved $5k").');
+  }
+  if (!text.match(/\b(my role|I (led|owned|managed)|as a|as the)\b/i)) {
+    tips.push('Clarify your role and responsibilities in the story (what you did, not just the team).');
+  }
+  tips.push('Practice aloud and record yourself to improve pacing and remove filler words.');
   return tips;
 }
 
@@ -68,6 +81,67 @@ saveBtn.addEventListener('click', () => {
   saveBtn.textContent = 'Saved';
   setTimeout(()=> saveBtn.textContent = 'Save Locally', 1200);
 });
+
+// Export / Import answers as JSON
+const exportBtn = document.getElementById('export-answers');
+const importBtn = document.getElementById('import-answers');
+const importFile = document.getElementById('import-file');
+
+function gatherSavedAnswers() {
+  const data = {};
+  for (let i=0;i<localStorage.length;i++){
+    const key = localStorage.key(i);
+    if (key && key.startsWith('answer_')) {
+      data[key] = localStorage.getItem(key);
+    }
+  }
+  return data;
+}
+
+exportBtn.addEventListener('click', () => {
+  const data = gatherSavedAnswers();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'offerup_coach_answers.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+importBtn.addEventListener('click', ()=> importFile.click());
+importFile.addEventListener('change', async (e)=>{
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  try {
+    const text = await f.text();
+    const obj = JSON.parse(text);
+    Object.keys(obj).forEach(k => {
+      if (k.startsWith('answer_')) localStorage.setItem(k, obj[k]);
+    });
+    renderQuestion();
+    alert('Imported answers into Local Storage.');
+  } catch (err) {
+    alert('Failed to import: ' + err.message);
+  }
+  importFile.value = '';
+});
+
+// Optional: sync to backend if available
+async function syncToServer() {
+  try {
+    const res = await fetch('/api/answers', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(gatherSavedAnswers())
+    });
+    if (res.ok) console.log('Synced to server');
+  } catch (e) {
+    // silently ignore if server not present
+  }
+}
 
 // Negotiation generator
 genNeg.addEventListener('click', () => {

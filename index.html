@@ -33,6 +33,10 @@
         <div class="controls">
           <button id="submit-answer">Get Feedback</button>
           <button id="save-answer">Save Locally</button>
+          <button id="export-answers" type="button">Export Answers</button>
+          <label for="import-file" class="sr-only">Import answers JSON</label>
+          <input id="import-file" type="file" accept="application/json" style="display:none" />
+          <button id="import-answers" type="button">Import Answers</button>
         </div>
 
         <div id="feedback" aria-live="polite" class="feedback">

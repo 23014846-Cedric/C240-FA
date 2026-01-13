@@ -23,3 +23,27 @@ Files
 
 Notes
 - This is a starter scaffold. Extend feedback heuristics, add user accounts, and persist data to a backend as next steps.
+
+Backend (optional)
+
+1. Change to the `server` directory and install dependencies:
+
+```powershell
+cd server
+npm install
+```
+
+2. Start the server:
+
+```powershell
+npm start
+```
+
+The server will run on port `3000` by default and exposes:
+- `GET /api/answers` — returns stored answers
+- `POST /api/answers` — accepts JSON body of answers to save
+
+Frontend Export/Import
+
+- Use the "Export Answers" button to download saved answers (JSON).
+- Use "Import Answers" to upload a previously exported JSON file; answers are merged into Local Storage.
