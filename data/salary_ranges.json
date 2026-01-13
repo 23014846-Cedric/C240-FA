@@ -1,0 +1,36 @@
+{
+  "Product Designer": {
+    "San Francisco, CA": {
+      "intern": {"low":40000,"high":60000},
+      "junior": {"low":70000,"high":95000},
+      "mid": {"low":95000,"high":130000},
+      "senior": {"low":130000,"high":170000}
+    },
+    "default": {
+      "intern":{"low":30000,"high":45000},
+      "junior":{"low":60000,"high":85000},
+      "mid":{"low":85000,"high":110000},
+      "senior":{"low":110000,"high":150000}
+    }
+  },
+  "Software Engineer": {
+    "San Francisco, CA": {
+      "junior":{"low":110000,"high":140000},
+      "mid":{"low":140000,"high":180000},
+      "senior":{"low":180000,"high":240000}
+    },
+    "default": {
+      "junior":{"low":70000,"high":95000},
+      "mid":{"low":95000,"high":130000},
+      "senior":{"low":130000,"high":200000}
+    }
+  },
+  "generic": {
+    "default": {
+      "intern":{"low":25000,"high":40000},
+      "junior":{"low":40000,"high":70000},
+      "mid":{"low":70000,"high":110000},
+      "senior":{"low":110000,"high":160000}
+    }
+  }
+}

@@ -22,6 +22,18 @@ body{
 
 .container{max-width:980px;margin:0 auto;padding:20px}
 
+/* Role setup and practice controls */
+#role-setup label, #role-setup input, #role-setup select, #role-setup textarea{
+  display:block;margin-bottom:8px;width:100%
+}
+.practice-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:12px}
+.practice-controls label{display:flex;align-items:center;gap:8px}
+.timer-controls{display:flex;align-items:center;gap:6px}
+.wordcount{font-weight:600}
+.rubric-score{font-weight:700;margin-bottom:8px}
+.session-list{margin-top:12px;padding:12px;border-radius:8px;background:#fff}
+
+
 .site-header{background:linear-gradient(90deg,var(--color-primary),var(--color-accent));color:white;padding:28px 0}
 .site-header h1{margin:0;font-size:1.6rem}
 .site-header .tagline{opacity:0.95;margin-top:6px}
@@ -55,6 +67,7 @@ button:focus{outline:3px solid rgba(11,116,255,0.18)}
 @media (max-width:640px){
   .question-area{flex-direction:row}
   button[aria-label]{display:none}
+  .practice-controls{flex-direction:column;align-items:stretch}
 }
 
 /* End of styles - extend as needed */

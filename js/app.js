@@ -2,18 +2,19 @@
 // - Provides question switching, answer feedback, localStorage save
 // - Generates simple negotiation scripts
 
-const sampleQuestions = [
-  "Tell me about a time you disagreed with a teammate. How did you handle it?",
-  "Walk me through a project you led from concept to delivery.",
-  "How do you prioritize tasks when everything feels urgent?",
-  "Why are you interested in this role at our company?",
-  "Describe a time you used data to make a decision — what was the outcome?",
-  "Tell me about a challenge you faced and how you resolved it.",
-  "How do you handle feedback and change your approach?",
-  "Give an example of when you had to learn a new skill quickly."
+const questionBank = [
+  {text: "Tell me about a time you disagreed with a teammate. How did you handle it?", category: 'Behavioral', difficulty: 'Medium'},
+  {text: "Walk me through a project you led from concept to delivery.", category: 'Behavioral', difficulty: 'Hard'},
+  {text: "How do you prioritize tasks when everything feels urgent?", category: 'Situational', difficulty: 'Medium'},
+  {text: "Why are you interested in this role at our company?", category: 'Culture', difficulty: 'Easy'},
+  {text: "Describe a time you used data to make a decision — what was the outcome?", category: 'Technical', difficulty: 'Medium'},
+  {text: "Tell me about a challenge you faced and how you resolved it.", category: 'Behavioral', difficulty: 'Medium'},
+  {text: "How do you handle feedback and change your approach?", category: 'Leadership', difficulty: 'Easy'},
+  {text: "Give an example of when you had to learn a new skill quickly.", category: 'Situational', difficulty: 'Easy'}
 ];
 
 let currentIndex = 0;
+let filteredQuestions = [...questionBank];
 
 // DOM refs
 const qText = document.getElementById('question-text');
@@ -32,19 +33,40 @@ const negTone = document.getElementById('neg-tone');
 const negDesired = document.getElementById('neg-desired');
 
 function renderQuestion() {
-  qText.textContent = sampleQuestions[currentIndex];
-  const saved = localStorage.getItem(`answer_${currentIndex}`);
+  if (!filteredQuestions.length) {
+    qText.textContent = 'No questions match the selected category/difficulty.';
+    answerEl.value = '';
+    return;
+  }
+  const q = filteredQuestions[currentIndex % filteredQuestions.length];
+  qText.textContent = q.text;
+  const saved = localStorage.getItem(`answer_${q.text}`);
   answerEl.value = saved || '';
 }
 
 prevBtn.addEventListener('click', () => {
-  currentIndex = (currentIndex - 1 + sampleQuestions.length) % sampleQuestions.length;
+  if (!filteredQuestions.length) return;
+  currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
   renderQuestion();
 });
 nextBtn.addEventListener('click', () => {
-  currentIndex = (currentIndex + 1) % sampleQuestions.length;
+  if (!filteredQuestions.length) return;
+  currentIndex = (currentIndex + 1) % filteredQuestions.length;
   renderQuestion();
 });
+
+// Filters
+const categorySelect = document.getElementById('question-category');
+const difficultySelect = document.getElementById('question-difficulty');
+function applyFilters(){
+  const cat = categorySelect.value;
+  const diff = difficultySelect.value;
+  filteredQuestions = questionBank.filter(q => q.category === cat && q.difficulty === diff);
+  currentIndex = 0;
+  renderQuestion();
+}
+categorySelect.addEventListener('change', applyFilters);
+difficultySelect.addEventListener('change', applyFilters);
 
 // Simple feedback heuristics
 function analyzeAnswer(text) {
@@ -67,6 +89,39 @@ function analyzeAnswer(text) {
   return tips;
 }
 
+// Rubric scoring and highlights
+function gradeAnswer(text){
+  const rubric = {STAR:0, clarity:0, specificity:0, impact:0, relevance:0, confidence:0};
+  const lower = text.toLowerCase();
+  if (/situation|task|action|result/.test(lower)) rubric.STAR = 1;
+  rubric.clarity = text.trim().length > 40 ? 1 : 0;
+  rubric.specificity = /\d+|%|\$/.test(text) ? 1 : 0;
+  rubric.impact = /result|impact|outcome|improved|reduced|increased/.test(lower) ? 1 : 0;
+  rubric.relevance = 1; // assume relevant for now
+  rubric.confidence = !/\b(um|uh|like|you know)\b/i.test(text) ? 1 : 0;
+  const score = Math.round((Object.values(rubric).reduce((a,b)=>a+b,0) / Object.keys(rubric).length) * 100);
+  // missing parts
+  const missing = [];
+  if (!rubric.STAR) missing.push('STAR structure (Situation, Task, Action, Result)');
+  if (!rubric.specificity) missing.push('Specific metrics or numbers');
+  if (!rubric.impact) missing.push('Clear result or impact');
+  return {score, rubric, missing};
+}
+
+function generateImprovedAnswer(original, roleContext){
+  // simple rule-based rewrite: enforce STAR order and add placeholders
+  const parts = [];
+  parts.push('Situation: [Briefly describe the context]');
+  parts.push('Task: [What needed to be done]');
+  parts.push('Action: [What you specifically did]');
+  parts.push('Result: [Outcome and metrics if available]');
+  if (original && original.trim().length){
+    parts.push('\nOriginal answer for reference:\n' + original.trim());
+  }
+  if (roleContext) parts.unshift(`Context: Role=${roleContext.title} (${roleContext.seniority}), Location=${roleContext.location}`);
+  return parts.join('\n\n');
+}
+
 submitBtn.addEventListener('click', () => {
   const text = answerEl.value || '';
   const tips = analyzeAnswer(text);
@@ -76,10 +131,19 @@ submitBtn.addEventListener('click', () => {
     li.textContent = t;
     feedbackList.appendChild(li);
   });
+  const grade = gradeAnswer(text);
+  document.getElementById('rubric-score').textContent = `Score: ${grade.score}%`;
+  const missingEl = grade.missing.length ? 'Missing: ' + grade.missing.join('; ') : '';
+  if (missingEl){
+    const li = document.createElement('li'); li.textContent = missingEl; feedbackList.appendChild(li);
+  }
+  const roleContext = JSON.parse(localStorage.getItem('current_role')||'null');
+  document.getElementById('improved-text').textContent = generateImprovedAnswer(text, roleContext);
 });
 
 saveBtn.addEventListener('click', () => {
-  localStorage.setItem(`answer_${currentIndex}`, answerEl.value || '');
+  const q = filteredQuestions[currentIndex % filteredQuestions.length];
+  localStorage.setItem(`answer_${q.text}`, answerEl.value || '');
   saveBtn.textContent = 'Saved';
   setTimeout(()=> saveBtn.textContent = 'Save Locally', 1200);
 });
@@ -201,6 +265,82 @@ genNeg.addEventListener('click', () => {
 
   negOutput.textContent = email + '\n\n' + talkingPoints;
 });
+
+// Negotiation form: additional inputs
+const negCurrency = document.createElement('input');
+// (we already have inputs in the form, so read them on demand)
+
+// Counter-offer suggestion: guardrails
+function suggestCounterOffer(offered, desired){
+  if (desired) return desired;
+  if (!offered) return null;
+  // suggest +5-15% depending on level of difference
+  const suggested = Math.round(offered * 1.10);
+  const max = Math.round(offered * 1.5);
+  return Math.min(suggested, max);
+}
+
+// Export top feedback & scripts as .txt
+const exportTopBtn = document.getElementById('export-top');
+exportTopBtn && exportTopBtn.addEventListener('click', ()=>{
+  // gather last feedback and negotiation output
+  const role = JSON.parse(localStorage.getItem('current_role')||'null');
+  const lastFeedback = Array.from(document.querySelectorAll('#feedback-list li')).map(li=>li.textContent).slice(0,8).join('\n');
+  const scripts = negOutput.textContent || '';
+  const content = [`Role: ${role?role.title+' ('+role.seniority+')':'—'}`, '', 'Top Feedback:', lastFeedback, '', 'Generated Scripts:', scripts].join('\n\n');
+  const blob = new Blob([content], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='offerup_coach_export.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
+
+// Session saving and list
+const saveSessionBtn = document.getElementById('save-session');
+const viewSessionsBtn = document.getElementById('view-sessions');
+const sessionsEl = document.getElementById('sessions');
+const sessionListWrap = document.getElementById('session-list');
+
+saveSessionBtn && saveSessionBtn.addEventListener('click', ()=>{
+  const role = JSON.parse(localStorage.getItem('current_role')||'null');
+  const q = filteredQuestions[currentIndex % filteredQuestions.length] || {text:'-'};
+  const feedback = Array.from(document.querySelectorAll('#feedback-list li')).map(li=>li.textContent);
+  const score = document.getElementById('rubric-score').textContent;
+  const scripts = negOutput.textContent;
+  const session = {id:Date.now(), role, question:q.text, answer:answerEl.value, feedback, score, scripts, when: new Date().toISOString()};
+  const sessions = JSON.parse(localStorage.getItem('offerup_sessions')||'[]');
+  sessions.unshift(session);
+  localStorage.setItem('offerup_sessions', JSON.stringify(sessions.slice(0,20)));
+  alert('Session saved locally.');
+});
+
+viewSessionsBtn && viewSessionsBtn.addEventListener('click', ()=>{
+  const sessions = JSON.parse(localStorage.getItem('offerup_sessions')||'[]');
+  sessionsEl.innerHTML = '';
+  if (!sessions.length){ sessionsEl.innerHTML = '<li>No sessions</li>'; sessionListWrap.hidden=false; return; }
+  sessions.forEach(s => { const li=document.createElement('li'); li.textContent = `${new Date(s.when).toLocaleString()} — ${s.role? s.role.title:'—'} — ${s.question}`; sessionsEl.appendChild(li); });
+  sessionListWrap.hidden=false;
+});
+
+// Role form handlers
+const saveRoleBtn = document.getElementById('save-role');
+const startPracticeBtn = document.getElementById('start-practice');
+saveRoleBtn && saveRoleBtn.addEventListener('click', ()=>{
+  const role = {title: document.getElementById('role-title').value.trim(), seniority: document.getElementById('role-seniority').value, industry: document.getElementById('role-industry').value.trim(), location: document.getElementById('role-location').value.trim(), desc: document.getElementById('role-desc').value.trim(), skills: document.getElementById('role-skills').value.split(',').map(s=>s.trim()).filter(Boolean)};
+  localStorage.setItem('current_role', JSON.stringify(role));
+  alert('Role saved.');
+});
+startPracticeBtn && startPracticeBtn.addEventListener('click', ()=>{ applyFilters(); document.getElementById('interview-practice').scrollIntoView({behavior:'smooth'}); });
+
+// Word count and timer
+const wordCountEl = document.getElementById('word-count');
+answerEl.addEventListener('input', ()=>{ wordCountEl.textContent = answerEl.value.trim() ? answerEl.value.trim().split(/\s+/).length : 0; });
+
+let timerInterval = null; let timerSeconds = 0;
+const timerDisplay = document.getElementById('timer-display');
+document.getElementById('timer-start').addEventListener('click', ()=>{ if (timerInterval) return; timerInterval = setInterval(()=>{ timerSeconds++; const m=Math.floor(timerSeconds/60).toString().padStart(2,'0'); const s=(timerSeconds%60).toString().padStart(2,'0'); timerDisplay.textContent = `${m}:${s}`; },1000); });
+document.getElementById('timer-pause').addEventListener('click', ()=>{ clearInterval(timerInterval); timerInterval=null; });
+
+// Record mode placeholder
+document.getElementById('record-toggle').addEventListener('click', ()=>{ alert('Record mode placeholder — audio recording not implemented in this MVP.'); });
 
 copyNeg.addEventListener('click', async () => {
   try {

@@ -47,3 +47,14 @@ Frontend Export/Import
 
 - Use the "Export Answers" button to download saved answers (JSON).
 - Use "Import Answers" to upload a previously exported JSON file; answers are merged into Local Storage.
+
+MVP Features Implemented
+
+- Role setup form (title, seniority, industry, location, description, skills)
+- Question bank with categories and difficulty filtering
+- Timer (start/pause), word count, and record-mode placeholder
+- Rule-based feedback engine with rubric, missing-parts highlights, and improved-answer suggestion
+- Negotiation generator with tone/style, counter-offer logic, and Email/Call/LinkedIn outputs
+- Local salary data fallback (data/salary_ranges.json)
+- Session history saved to `localStorage` and export of top feedback/scripts as `.txt`
+
