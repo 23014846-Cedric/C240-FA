@@ -1,70 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="/styles.css">
 <head>
   <meta charset="UTF-8">
   <title>Investing Coach</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Your global CSS -->
+  <link rel="stylesheet" href="/styles.css">
+
   <style>
-    body { margin:0; font-family: Inter, Arial, sans-serif; background:#0b1020; color:#eaf0ff; }
-    nav { background:#0d1328; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; }
-    nav a { color:#a9b3d6; text-decoration:none; margin-left:16px; }
-    nav a.active { color:#66e3ff; font-weight:600; }
-    .container { max-width:900px; margin:40px auto; padding:0 16px; }
-    select, input { width:100%; padding:10px; margin-top:6px; background:#111a33; border:1px solid #233055; color:#fff; border-radius:10px; }
-    button { margin-top:16px; padding:10px 16px; border-radius:10px; border:1px solid #233055; background:#13204a; color:#fff; cursor:pointer; }
-    .card { background:#111a33; border:1px solid #233055; border-radius:16px; padding:20px; margin-top:20px; }
-    pre { white-space:pre-wrap; }
+    /* Page-specific tweaks (optional) */
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn-secondary {
+      background: #0d1733;
+    }
+
+    .toast {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #a9b3d6;
+      display: none;
+    }
+
+    /* Chatbox pinned to bottom */
+    .chatbox {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(13, 19, 40, 0.92);
+      border-top: 1px solid #233055;
+      padding: 12px 16px;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+    }
+
+    .chatbox-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .chatbox-title {
+      color: #eaf0ff;
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .chatbox-slot {
+      flex: 1;
+      min-height: 44px;
+      border: 1px dashed #233055;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #a9b3d6;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    /* Prevent chatbox overlapping page content */
+    .page-spacer {
+      height: 90px; /* adjust if your embed is taller */
+    }
   </style>
 </head>
-<body>
 
-<div class="container">
+<body>
+  <div class="container">
     <%- include("partials/navbar") %>
     <br><br>
-  <h1>Investing Coach</h1>
-  <p>Simple ETF-based investing guidance for beginners.</p>
 
-  <div class="card">
-    <label>Investment Goal</label>
-    <select id="goal">
-      <option value="long">Long-term (10+ years)</option>
-      <option value="mid">Medium-term (5–10 years)</option>
-      <option value="short">Short-term (0–5 years)</option>
-    </select>
+    <h1>Investing Coach</h1>
+    <p>Simple ETF-based investing guidance for beginners.</p>
 
-    <label>Risk Tolerance</label>
-    <select id="risk">
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
+    <div class="card">
+      <label>Investment Goal</label>
+      <select id="goal">
+        <option value="long">Long-term (10+ years)</option>
+        <option value="mid">Medium-term (5–10 years)</option>
+        <option value="short">Short-term (0–5 years)</option>
+      </select>
 
-    <label>Monthly Investment (SGD)</label>
-    <input type="number" id="amount" value="300">
+      <label>Risk Tolerance</label>
+      <select id="risk">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
 
-    <button type="button" onclick="generate()">Generate Plan</button>
+      <label>Monthly Investment (SGD)</label>
+      <input type="number" id="amount" value="300">
+
+      <div class="actions">
+        <button type="button" onclick="generate()">Generate Plan</button>
+        <button type="button" class="btn-secondary" onclick="copyPlan()">Copy Plan</button>
+      </div>
+
+      <div id="toast" class="toast">Copied!</div>
+    </div>
+
+    <div class="card">
+      <h3>Your Plan</h3>
+      <pre id="plan">Click “Generate Plan” to create a plan.</pre>
+    </div>
+
+    <!-- Stops the fixed chatbox from covering content -->
+    <div class="page-spacer"></div>
   </div>
 
-  <div class="card">
-    <h3>Your Plan</h3>
-    <pre id="plan"></pre>
+  <!-- Chatbox area at bottom for your embed -->
+  <div class="chatbox">
+    <div class="chatbox-inner">
+      <div class="chatbox-title">Chat</div>
+
+      <!-- Paste your embed code inside this div (iframe/script/etc.) -->
+      <div class="chatbox-slot" id="chat-embed">
+        Paste your chat embed here (iframe/script).
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-  function generate() {
-    const goal = document.getElementById("goal").value;
-    const risk = document.getElementById("risk").value;
-    const amt = document.getElementById("amount").value;
+  <script>
+    function generate() {
+      const goal = document.getElementById("goal").value;
+      const risk = document.getElementById("risk").value;
+      const amt = document.getElementById("amount").value;
 
-    const equityPct = risk === "high"
-      ? "80–100%"
-      : risk === "medium"
-        ? "60–70%"
-        : "40–50%";
+      const equityPct = risk === "high"
+        ? "80–100%"
+        : risk === "medium"
+          ? "60–70%"
+          : "40–50%";
 
-    document.getElementById("plan").textContent =
+      document.getElementById("plan").textContent =
 `Profile Summary
 ----------------
 Goal: ${goal}
@@ -82,8 +163,37 @@ Step-by-step:
 4. Rebalance once a year
 
 (Educational only, not financial advice)`;
-  }
-</script>
+    }
 
+    async function copyPlan() {
+      const planText = document.getElementById("plan").textContent || "";
+      if (!planText.trim()) return;
+
+      try {
+        await navigator.clipboard.writeText(planText);
+
+        const toast = document.getElementById("toast");
+        toast.style.display = "block";
+        toast.textContent = "Copied to clipboard ✅";
+        setTimeout(() => toast.style.display = "none", 1500);
+      } catch (err) {
+        // Fallback for older browsers
+        const temp = document.createElement("textarea");
+        temp.value = planText;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+
+        const toast = document.getElementById("toast");
+        toast.style.display = "block";
+        toast.textContent = "Copied ✅";
+        setTimeout(() => toast.style.display = "none", 1500);
+      }
+    }
+
+    // Optional helper: easily inject embed code via JS (if you want)
+    // document.getElementById("chat-embed").innerHTML = `<iframe ...></iframe>`;
+  </script>
 </body>
 </html>
