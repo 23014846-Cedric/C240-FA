@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/navbar') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Flowise widget positioning -->
+    <style>
+        /* Flowise bottom-left override */
+        .flowise-chat-widget {
+            position: fixed !important;
+            bottom: 20px !important;  /* distance from bottom */
+            left: 20px !important;    /* distance from left */
+            top: auto !important;
+            right: auto !important;
+            z-index: 9999 !important; /* ensure it's on top */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>📋 Task Management System</h1>
+            <p>Upload your Excel file and manage tasks efficiently</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2>Upload Tasks</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="excelFile">Select Excel File (.xlsx, .xls)</label>
+                        <input type="file" id="excelFile" name="excelFile" accept=".xlsx,.xls" required>
+                        <small>Excel file should have columns: Task, Priority, Deadline</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload File</button>
+                </form>
+
+                <% if (message) { %>
+                    <div class="alert <% if (message.includes('Success')) { %>alert-success<% } else { %>alert-error<% } %>">
+                        <%= message %>
+                    </div>
+                <% } %>
+            </section>
+
+            <!-- Tasks Display Section -->
+            <% if (tasks.length > 0) { %>
+                <section class="tasks-section">
+                    <div class="section-header">
+                        <h2>Tasks (<%= tasks.length %>)</h2>
+                        <button class="btn btn-download" onclick="downloadExcel()">📥 Download Excel</button>
+                    </div>
+
+                    <div class="tasks-grid">
+                        <% tasks.forEach((task, index) => { %>
+                            <div class="task-card priority-<%= task.priority.toLowerCase() %>">
+                                <div class="task-header">
+                                    <h3><%= task.task %></h3>
+                                    <div class="task-actions">
+                                        <span class="priority-badge <%= task.priority.toLowerCase() %>">
+                                            <%= task.priority %>
+                                        </span>
+                                        <button class="btn-delete" onclick="deleteTask('<%= task.task %>', '<%= task.deadline %>')">✕</button>
+                                    </div>
+                                </div>
+
+                                <div class="task-details">
+                                    <p><strong>Deadline:</strong>
+                                        <%= new Date(task.deadline).toLocaleDateString() %>
+                                    </p>
+                                    <p><strong>Days Until Deadline:</strong> <%= task.daysUntil %></p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </section>
+            <% } else { %>
+                <section class="empty-state">
+                    <p>No tasks yet. Upload an Excel file to get started!</p>
+                </section>
+            <% } %>
+
+            <!-- Add New Task -->
+            <section class="add-task-section">
+                <h2>➕ Add New Task</h2>
+                <form id="addTaskForm" class="add-task-form">
+                    <div class="form-row">
+                        <input type="text" name="task" placeholder="Task description" required>
+                        <select name="priority" required>
+                            <option value="">Priority</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+                        <input type="date" name="deadline" required>
+                        <button class="btn btn-add">Add Task</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- n8n Chat -->
+            <section class="assistant-section">
+                <div id="n8n-chat"></div>
+
+                <link
+                    href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
+                    rel="stylesheet"
+                />
+
+                <script type="module">
+                    import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
+                    createChat({
+                        target: "#n8n-chat",
+                        webhookUrl: "https://n8ngc.codeblazar.org/webhook/cf707f2e-5a12-45ae-9a06-803c524f87c9/chat"
+                    });
+                </script>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Task Management System </p>
+        </footer>
+    </div>
+
+    <!-- Frontend logic -->
+    <script src="/js/main.js"></script>
+    <script type="module" src="/chat.js"></script>
+
+    <flowise-fullchatbot></flowise-fullchatbot>
+    <script type="module">
+        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+        Chatbot.initFull({
+            chatflowid: "6b288294-b9aa-485e-8cf1-9e04a42b9c86",
+            apiHost: "https://flowise-production-9ba5.up.railway.app",
+        })
+    </script>
+
+</body>
+</html>
+

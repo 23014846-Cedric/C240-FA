@@ -1,25 +1,22 @@
 {
-  "name": "c240-fa",
+  "name": "task-management-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Task management website with Excel upload and Flowise AI assistant integration",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/23014846-Cedric/C240-FA.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/23014846-Cedric/C240-FA/issues"
-  },
-  "homepage": "https://github.com/23014846-Cedric/C240-FA#readme",
   "dependencies": {
-    "ejs": "^3.1.10",
-    "express": "^5.2.1"
+    "@n8n/chat": "^1.4.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.22.1",
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
