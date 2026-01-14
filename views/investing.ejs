@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Investing Coach</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin:0; font-family: Inter, Arial, sans-serif; background:#0b1020; color:#eaf0ff; }
+    nav { background:#0d1328; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; }
+    nav a { color:#a9b3d6; text-decoration:none; margin-left:16px; }
+    nav a.active { color:#66e3ff; font-weight:600; }
+    .container { max-width:900px; margin:40px auto; padding:0 16px; }
+    select, input { width:100%; padding:10px; margin-top:6px; background:#111a33; border:1px solid #233055; color:#fff; border-radius:10px; }
+    button { margin-top:16px; padding:10px 16px; border-radius:10px; border:1px solid #233055; background:#13204a; color:#fff; cursor:pointer; }
+    .card { background:#111a33; border:1px solid #233055; border-radius:16px; padding:20px; margin-top:20px; }
+    pre { white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <strong>Assistant Hub</strong>
+  <div>
+    <a href="/meeting">Meeting Assistant</a>
+    <a href="/investing" class="active">Investing Coach</a>
+  </div>
+  <%- include("partials/navbar") %>
+</nav>
+
+<div class="container">
+  <h1>Investing Coach</h1>
+  <p>Simple ETF-based investing guidance for beginners.</p>
+
+  <div class="card">
+    <label>Investment Goal</label>
+    <select id="goal">
+      <option value="long">Long-term (10+ years)</option>
+      <option value="mid">Medium-term (5–10 years)</option>
+      <option value="short">Short-term (0–5 years)</option>
+    </select>
+
+    <label>Risk Tolerance</label>
+    <select id="risk">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <label>Monthly Investment (SGD)</label>
+    <input type="number" id="amount" value="300">
+
+    <button type="button" onclick="generate()">Generate Plan</button>
+  </div>
+
+  <div class="card">
+    <h3>Your Plan</h3>
+    <pre id="plan"></pre>
+  </div>
+</div>
+
+<script>
+  function generate() {
+    const goal = document.getElementById("goal").value;
+    const risk = document.getElementById("risk").value;
+    const amt = document.getElementById("amount").value;
+
+    const equityPct = risk === "high"
+      ? "80–100%"
+      : risk === "medium"
+        ? "60–70%"
+        : "40–50%";
+
+    document.getElementById("plan").textContent =
+`Profile Summary
+----------------
+Goal: ${goal}
+Risk: ${risk}
+
+Suggested Simple Portfolio
+- Equity ETFs: ${equityPct}
+- Bond Funds: remainder
+- Cash: small buffer
+
+Step-by-step:
+1. Open brokerage account
+2. Buy ETFs monthly (DCA)
+3. Invest SGD ${amt}/month
+4. Rebalance once a year
+
+(Educational only, not financial advice)`;
+  }
+</script>
+
+</body>
+</html>
