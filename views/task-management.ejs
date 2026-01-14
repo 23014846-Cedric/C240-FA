@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <%- include('partials/navbar') %>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Management System</title>
@@ -10,126 +11,115 @@
 
   <!-- Flowise widget positioning -->
   <style>
+    /* Flowise bottom-left override */
     .flowise-chat-widget {
       position: fixed !important;
-      bottom: 20px !important;
-      left: 20px !important;
+      bottom: 20px !important;  /* distance from bottom */
+      left: 20px !important;    /* distance from left */
       top: auto !important;
       right: auto !important;
-      z-index: 9999 !important;
+      z-index: 9999 !important; /* ensure it's on top */
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <%- include("partials/navbar") %>
 
+  <div class="container">
     <header class="page-header">
-      <h1>📋 Task Management</h1>
-      <p class="subtitle">Upload an Excel file and manage tasks efficiently.</p>
+      <h1>📋 Task Management System</h1>
+      <p class="subtitle">Upload your Excel file and manage tasks efficiently</p>
     </header>
 
     <main>
-      <!-- Upload -->
+      <!-- Upload Section -->
       <section class="card">
         <div class="section-header">
           <h3 class="card-title">Upload Tasks</h3>
         </div>
-
         <form id="uploadForm" enctype="multipart/form-data" class="stack">
           <label for="excelFile">Select Excel File (.xlsx, .xls)</label>
           <input type="file" id="excelFile" name="excelFile" accept=".xlsx,.xls" required>
           <p class="helper">Excel file should have columns: Task, Priority, Deadline</p>
-
           <div class="actions">
             <button type="submit">Upload File</button>
           </div>
         </form>
 
         <% if (message) { %>
-          <div class="alert <%= message.toLowerCase().includes('success') ? 'alert-success' : 'alert-error' %>">
+          <div class="alert <%= message.includes('Success') ? 'alert-success' : 'alert-error' %>">
             <%= message %>
           </div>
         <% } %>
       </section>
 
-      <!-- Tasks -->
-      <section class="card">
-        <div class="section-header">
-          <h3 class="card-title">Tasks (<%= tasks.length %>)</h3>
+      <!-- Tasks Display Section -->
+      <% if (tasks.length > 0) { %>
+        <section class="card">
+          <div class="section-header">
+            <h3 class="card-title">Tasks (<%= tasks.length %>)</h3>
+            <button class="btn-secondary" onclick="downloadExcel()">📥 Download Excel</button>
+          </div>
 
-          <% if (tasks.length > 0) { %>
-            <button class="btn-secondary" type="button" onclick="downloadExcel()">📥 Download Excel</button>
-          <% } %>
-        </div>
-
-        <% if (tasks.length > 0) { %>
           <div class="tasks-grid">
-            <% tasks.forEach((task) => { %>
+            <% tasks.forEach((task, index) => { %>
               <div class="task-card priority-<%= task.priority.toLowerCase() %>">
                 <div class="task-top">
                   <h4 class="task-title"><%= task.task %></h4>
-
                   <div class="task-actions">
                     <span class="priority-pill <%= task.priority.toLowerCase() %>">
                       <%= task.priority %>
                     </span>
-
-                    <button class="icon-btn" type="button"
-                      onclick="deleteTask('<%= task.task %>', '<%= task.deadline %>')"
-                      aria-label="Delete task">✕</button>
+                    <button class="icon-btn" onclick="deleteTask('<%= task.task %>', '<%= task.deadline %>')">✕</button>
                   </div>
                 </div>
 
                 <div class="task-meta">
                   <div>
                     <span class="meta-label">Deadline</span>
-                    <span class="meta-value"><%= new Date(task.deadline).toLocaleDateString() %></span>
+                    <span class="meta-value">
+                      <%= new Date(task.deadline).toLocaleDateString() %>
+                    </span>
                   </div>
-
                   <div>
-                    <span class="meta-label">Due</span>
+                    <span class="meta-label">Days Until Deadline</span>
                     <span class="meta-value"><%= task.daysUntil %></span>
                   </div>
                 </div>
               </div>
             <% }) %>
           </div>
-        <% } else { %>
+        </section>
+      <% } else { %>
+        <section class="card">
           <div class="empty-state">
             <p>No tasks yet. Upload an Excel file to get started!</p>
           </div>
-        <% } %>
-      </section>
+        </section>
+      <% } %>
 
-      <!-- Add Task -->
+      <!-- Add New Task -->
       <section class="card">
         <div class="section-header">
           <h3 class="card-title">➕ Add New Task</h3>
         </div>
-
         <form id="addTaskForm" class="form-grid">
           <div class="full">
             <label>Task</label>
             <input type="text" name="task" placeholder="Task description" required>
           </div>
-
           <div>
             <label>Priority</label>
             <select name="priority" required>
-              <option value="">Select</option>
+              <option value="">Priority</option>
               <option>High</option>
               <option>Medium</option>
               <option>Low</option>
             </select>
           </div>
-
           <div>
             <label>Deadline</label>
             <input type="date" name="deadline" required>
           </div>
-
           <div class="full actions">
             <button type="submit">Add Task</button>
           </div>
@@ -141,27 +131,33 @@
         <div class="section-header">
           <h3 class="card-title">Assistant</h3>
         </div>
-
         <div id="n8n-chat"></div>
 
-        <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
+          rel="stylesheet"
+        />
+
         <script type="module">
           import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
           createChat({
             target: "#n8n-chat",
             webhookUrl: "https://n8ngc.codeblazar.org/webhook/cf707f2e-5a12-45ae-9a06-803c524f87c9/chat"
           });
         </script>
       </section>
+
     </main>
 
     <footer class="footer">
-      <p>&copy; 2026 Task Management System</p>
+      <p>&copy; 2026 Task Management System </p>
     </footer>
   </div>
 
   <!-- Frontend logic -->
   <script src="/js/main.js"></script>
+  <script type="module" src="/chat.js"></script>
 
   <flowise-fullchatbot></flowise-fullchatbot>
   <script type="module">
@@ -171,5 +167,6 @@
       apiHost: "https://flowise-production-9ba5.up.railway.app",
     })
   </script>
+
 </body>
 </html>
