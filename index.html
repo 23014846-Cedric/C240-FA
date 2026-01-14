@@ -161,6 +161,16 @@
       </section>
     </main>
 
+    <flowise-fullchatbot></flowise-fullchatbot>
+    <script type="module">
+        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+        Chatbot.initFull({
+            chatflowid: "3603c6b4-7667-4c97-9231-1481b29d55f8",
+            apiHost: "https://flowise-production-c4be.up.railway.app",
+        })
+    </script>
+
+
     <footer class="site-footer">
       <div class="container">Built for students & young professionals — OfferUp Coach</div>
     </footer>
