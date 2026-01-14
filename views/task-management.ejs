@@ -19,6 +19,23 @@
       right: auto !important;
       z-index: 9999 !important; /* ensure it's on top */
     }
+      /* Video container styling (matches investing page) */
+      .video-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 */
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #233055;
+        background: #0b132b;
+      }
+
+      .video-wrapper video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
   </style>
 </head>
 <body>
@@ -30,6 +47,18 @@
     </header>
 
     <main>
+      <!-- Schedule Walkthrough Video -->
+      <section class="card">
+        <h3 class="card-title">📺 Schedule Walkthrough</h3>
+
+        <div class="video-wrapper">
+          <video controls preload="metadata">
+            <source src="/videos/Schedule%20walkthrough.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
+
       <!-- Upload Section -->
       <section class="card">
         <div class="section-header">
