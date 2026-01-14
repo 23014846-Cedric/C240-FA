@@ -11,19 +11,24 @@ app.set("views", path.join(__dirname, "views"));
 // Optional: serve static files (css, images, client js) from /public
 app.use(express.static(path.join(__dirname, "public")));
 
-// Routes
-app.get("/", (req, res) => {
-  res.redirect("/investing");
-});
-
 app.get("/investing", (req, res) => {
-  res.render("investing");
+  res.render("investing", { page: "investing" });
 });
 
-// If you have a meeting page later:
-app.get("/meeting", (req, res) => {
-  // create views/meeting.ejs if you want
-  res.send("Meeting Assistant page not added yet.");
+app.get("/budgeting", (req, res) => {
+  res.render("budgeting", { page: "budgeting" });
+});
+
+app.get("/careers", (req, res) => {
+  res.render("careers", { page: "careers" });
+});
+
+app.get("/interviews", (req, res) => {
+  res.render("interviews", { page: "interviews" });
+});
+
+app.get("/prioritization", (req, res) => {
+  res.render("prioritization", { page: "prioritization" });
 });
 
 app.listen(PORT, () => {

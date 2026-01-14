@@ -1,9 +1,71 @@
+<style>
+/* ===== NAVBAR ===== */
+.navbar {
+  background: linear-gradient(90deg, #0d1328, #111a33);
+  padding: 14px 32px;
+  border-bottom: 1px solid #233055;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu li {
+  position: relative;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: #a9b3d6;
+  padding: 8px 2px;
+  transition: all 0.25s ease;
+}
+
+/* Hover glow */
+.nav-menu a:hover {
+  color: #66e3ff;
+  text-shadow: 0 0 8px rgba(102,227,255,0.6);
+}
+
+/* Active page */
+.nav-menu a.active {
+  color: #66e3ff;
+  font-weight: 600;
+}
+
+/* Underline animation */
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #66e3ff, #7c7cff);
+  transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
+}
+</style>
+
 <nav class="navbar">
   <ul class="nav-menu">
-    <li><a href="/budgeting">Budgeting</a></li>
-    <li><a href="/investing">Investing</a></li>
-    <li><a href="/careers">Careers</a></li>
-    <li><a href="/interviews">Interviews</a></li>
-    <li><a href="/prioritization">Prioritization</a></li>
+    <li><a href="/budgeting" class="<%= page === 'budgeting' ? 'active' : '' %>">Budgeting</a></li>
+    <li><a href="/investing" class="<%= page === 'investing' ? 'active' : '' %>">Investing</a></li>
+    <li><a href="/careers" class="<%= page === 'careers' ? 'active' : '' %>">Careers</a></li>
+    <li><a href="/interviews" class="<%= page === 'interviews' ? 'active' : '' %>">Interviews</a></li>
+    <li><a href="/prioritization" class="<%= page === 'prioritization' ? 'active' : '' %>">Prioritization</a></li>
   </ul>
 </nav>
