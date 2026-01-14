@@ -1,149 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('partials/navbar') %>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Management System</title>
+  <meta charset="UTF-8">
+  <title>Assistant Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* Small homepage-only styling */
+    .hero {
+      margin-top: 18px;
+      padding: 26px;
+    }
 
-    <!-- App styles -->
-    <link rel="stylesheet" href="/css/style.css">
+    .hero h1 {
+      font-size: 38px;
+      letter-spacing: .2px;
+      margin-bottom: 10px;
+    }
 
-    <!-- Flowise widget positioning -->
-    <style>
-        /* Flowise bottom-left override */
-        .flowise-chat-widget {
-            position: fixed !important;
-            bottom: 20px !important;  /* distance from bottom */
-            left: 20px !important;    /* distance from left */
-            top: auto !important;
-            right: auto !important;
-            z-index: 9999 !important; /* ensure it's on top */
-        }
-    </style>
+    .hero p {
+      color: #a9b3d6;
+      line-height: 1.6;
+      max-width: 65ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .tool-card {
+      background: linear-gradient(180deg, #111a33, #0c142b);
+      border: 1px solid #233055;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 0 40px rgba(0,0,0,.25);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(102,227,255,.4);
+      box-shadow: 0 0 50px rgba(0,0,0,.35);
+    }
+
+    .tool-card h3 {
+      margin-bottom: 6px;
+      font-size: 16px;
+      color: #eaf0ff;
+    }
+
+    .tool-card p {
+      color: #a9b3d6;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .tool-card a {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 14px;
+      color: #66e3ff;
+      border: 1px solid #233055;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #0d1733;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .tool-card a:hover {
+      background: #13204a;
+      transform: translateY(-1px);
+    }
+
+    .quick-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid #233055;
+      background: linear-gradient(135deg, #13204a, #1b2a6b);
+      color: #fff;
+      font-size: 14px;
+      transition: all .25s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #1b2a6b, #2436a3);
+      box-shadow: 0 0 15px rgba(102,227,255,.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #0d1733;
+    }
+
+    .btn-secondary:hover {
+      background: #13204a;
+      box-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 30px; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <%- include("partials/navbar") %>
 
-    <div class="container">
-        <header>
-            <h1>📋 Task Management System</h1>
-            <p>Upload your Excel file and manage tasks efficiently</p>
-        </header>
+    <div class="card hero">
+      <h1>Assistant Hub</h1>
+      <p>
+        Welcome! This site combines multiple mini tools to help you manage money, plan investing,
+        grow your career, prepare for interviews, and stay organised with tasks.
+      </p>
 
-        <main>
-            <!-- Upload Section -->
-            <section class="upload-section">
-                <h2>Upload Tasks</h2>
-                <form id="uploadForm" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="excelFile">Select Excel File (.xlsx, .xls)</label>
-                        <input type="file" id="excelFile" name="excelFile" accept=".xlsx,.xls" required>
-                        <small>Excel file should have columns: Task, Priority, Deadline</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Upload File</button>
-                </form>
-
-                <% if (message) { %>
-                    <div class="alert <% if (message.includes('Success')) { %>alert-success<% } else { %>alert-error<% } %>">
-                        <%= message %>
-                    </div>
-                <% } %>
-            </section>
-
-            <!-- Tasks Display Section -->
-            <% if (tasks.length > 0) { %>
-                <section class="tasks-section">
-                    <div class="section-header">
-                        <h2>Tasks (<%= tasks.length %>)</h2>
-                        <button class="btn btn-download" onclick="downloadExcel()">📥 Download Excel</button>
-                    </div>
-
-                    <div class="tasks-grid">
-                        <% tasks.forEach((task, index) => { %>
-                            <div class="task-card priority-<%= task.priority.toLowerCase() %>">
-                                <div class="task-header">
-                                    <h3><%= task.task %></h3>
-                                    <div class="task-actions">
-                                        <span class="priority-badge <%= task.priority.toLowerCase() %>">
-                                            <%= task.priority %>
-                                        </span>
-                                        <button class="btn-delete" onclick="deleteTask('<%= task.task %>', '<%= task.deadline %>')">✕</button>
-                                    </div>
-                                </div>
-
-                                <div class="task-details">
-                                    <p><strong>Deadline:</strong>
-                                        <%= new Date(task.deadline).toLocaleDateString() %>
-                                    </p>
-                                    <p><strong>Days Until Deadline:</strong> <%= task.daysUntil %></p>
-                                </div>
-                            </div>
-                        <% }) %>
-                    </div>
-                </section>
-            <% } else { %>
-                <section class="empty-state">
-                    <p>No tasks yet. Upload an Excel file to get started!</p>
-                </section>
-            <% } %>
-
-            <!-- Add New Task -->
-            <section class="add-task-section">
-                <h2>➕ Add New Task</h2>
-                <form id="addTaskForm" class="add-task-form">
-                    <div class="form-row">
-                        <input type="text" name="task" placeholder="Task description" required>
-                        <select name="priority" required>
-                            <option value="">Priority</option>
-                            <option>High</option>
-                            <option>Medium</option>
-                            <option>Low</option>
-                        </select>
-                        <input type="date" name="deadline" required>
-                        <button class="btn btn-add">Add Task</button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- n8n Chat -->
-            <section class="assistant-section">
-                <div id="n8n-chat"></div>
-
-                <link
-                    href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
-                    rel="stylesheet"
-                />
-
-                <script type="module">
-                    import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
-
-                    createChat({
-                        target: "#n8n-chat",
-                        webhookUrl: "https://n8ngc.codeblazar.org/webhook/cf707f2e-5a12-45ae-9a06-803c524f87c9/chat"
-                    });
-                </script>
-            </section>
-
-        </main>
-
-        <footer>
-            <p>&copy; 2026 Task Management System </p>
-        </footer>
+      <div class="quick-actions">
+        <a class="btn" href="/task-management">Open Task Management</a>
+        <a class="btn btn-secondary" href="/investing">Try Investing Coach</a>
+      </div>
     </div>
 
-    <!-- Frontend logic -->
-    <script src="/js/main.js"></script>
-    <script type="module" src="/chat.js"></script>
+    <div class="grid">
+      <div class="tool-card">
+        <h3>💼 Careers</h3>
+        <p>Create a simple career plan with goals, skills to build, and next steps.</p>
+        <a href="/careers">Open Careers</a>
+      </div>
 
-    <flowise-fullchatbot></flowise-fullchatbot>
-    <script type="module">
-        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
-        Chatbot.initFull({
-            chatflowid: "6b288294-b9aa-485e-8cf1-9e04a42b9c86",
-            apiHost: "https://flowise-production-9ba5.up.railway.app",
-        })
-    </script>
+      <div class="tool-card">
+        <h3>🎤 Interviews</h3>
+        <p>Practice interview answers using clear structure (like STAR) and improve confidence.</p>
+        <a href="/interviews">Open Interviews</a>
+      </div>
 
+      <div class="tool-card">
+        <h3>📈 Investing Coach</h3>
+        <p>Generate an ETF-based beginner portfolio idea based on goal, risk, and monthly amount.</p>
+        <a href="/investing">Open Investing</a>
+      </div>
+
+      <div class="tool-card">
+        <h3>🧾 Budgeting</h3>
+        <p>Track income and expenses and build a simple monthly budgeting plan.</p>
+        <a href="/budgeting">Open Budgeting</a>
+      </div>
+
+      <div class="tool-card">
+        <h3>✅ Prioritization</h3>
+        <p>Use task deadlines + priority levels to decide what to do first.</p>
+        <a href="/prioritization">Open Prioritization</a>
+      </div>
+
+      <div class="tool-card">
+        <h3>📋 Task Management</h3>
+        <p>Upload Excel tasks, add new tasks, delete tasks, and download updated Excel.</p>
+        <a href="/task-management">Open Tasks</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
-
