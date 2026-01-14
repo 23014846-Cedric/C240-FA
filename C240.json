@@ -1,0 +1,215 @@
+{
+  "name": "C240",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        -160
+      ],
+      "id": "b043337a-8812-4b39-82a5-a8d490a87598",
+      "name": "When chat message received",
+      "webhookId": "cf707f2e-5a12-45ae-9a06-803c524f87c9"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant\n\n# Column Headings\n-Id\n-Task\n-Priority\n-Deadline"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        592,
+        -48
+      ],
+      "id": "243a3d14-ab7f-45f5-ad7c-a13443b07fd9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        240,
+        176
+      ],
+      "id": "e9178f6c-604a-411b-9580-99b998e6d8a0",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "uUENyvWMT2EBaEUx",
+          "name": "Groq account 58"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        176
+      ],
+      "id": "89cc90b3-f49f-46e5-8054-6367ba814625",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FqlZuO08V3zI9wIG",
+          "name": "Google Gemini(PaLM) Api account 169"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8ngc.codeblazar.org/mcp/8db98cc3-cc5e-4e32-9618-f4ba080ee13d",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        176
+      ],
+      "id": "5567e2c7-c7d2-417a-8117-a593bc975cfd",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.chatInput }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        160
+      ],
+      "id": "f07bf7e3-761a-41bc-af38-b64842fa9dff",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "path": "7d00114a-6756-4830-a6f0-77650c93840e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        16
+      ],
+      "id": "12e51e89-5ec1-400a-9825-94333da1447f",
+      "name": "Webhook",
+      "webhookId": "7d00114a-6756-4830-a6f0-77650c93840e"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=={\n  \"success\": true,\n  \"response\": \"{{ $items('AI Agent')[0].json.output }}\",\n  \"userMessage\": \"{{ $items('When chat message received')[0].json.chatInput }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1040,
+        -48
+      ],
+      "id": "74fc7786-7603-42fd-b804-100fa49212dd",
+      "name": "Respond to Webhook",
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "b894e877-8331-4019-a33c-45adb17c3a62",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d4ebadb9d95df0efff4e8784a1811953a63bd62f8d7a2a45b7c8f23992108d48"
+  },
+  "id": "6YWb_7JW1HZDBK_dLupDY",
+  "tags": []
+}
