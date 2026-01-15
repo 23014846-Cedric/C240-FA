@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json({limit:'1mb'}));
 
 // Serve project root as static so assets (css/, js/, data/) are available
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Configure EJS views
 app.set('views', path.join(__dirname, '..', 'views'));

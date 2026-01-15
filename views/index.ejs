@@ -82,19 +82,19 @@
         </div>
 
         <div class="question-area">
-          <button id="prev-q" aria-label="Previous question">◀</button>
+          <button id="prev-q" type="button" aria-label="Previous question">◀</button>
           <div class="question-card">
             <h3 id="question-text">Loading question...</h3>
             <p class="hint">Tip: Use STAR (Situation, Task, Action, Result)</p>
           </div>
-          <button id="next-q" aria-label="Next question">▶</button>
+          <button id="next-q" type="button" aria-label="Next question">▶</button>
         </div>
 
         <label for="answer" class="sr-only">Your answer</label>
         <textarea id="answer" placeholder="Type your answer here..." rows="6"></textarea>
         <div class="controls">
-          <button id="submit-answer">Get Feedback</button>
-          <button id="save-answer">Save Locally</button>
+          <button id="submit-answer" type="button">Get Feedback</button>
+          <button id="save-answer" type="button">Save Locally</button>
           <button id="export-answers" type="button">Export Answers</button>
           <label for="import-file" class="sr-only">Import answers JSON</label>
           <input id="import-file" type="file" accept="application/json" style="display:none" />
@@ -112,8 +112,8 @@
         </div>
 
         <div class="session-controls">
-          <button id="save-session">Save Session</button>
-          <button id="view-sessions">View Sessions</button>
+          <button id="save-session" type="button">Save Session</button>
+          <button id="view-sessions" type="button">View Sessions</button>
           <button id="export-top" type="button">Export Top Feedback & Scripts</button>
         </div>
 
@@ -190,7 +190,7 @@
             webhookUrl: "https://n8ngc.codeblazar.org/webhook/91904ced-1b76-4a29-8ab6-109dd8143488/chat"
           });
         </script>
-      </section>
+      
  
 
     <footer class="site-footer">
