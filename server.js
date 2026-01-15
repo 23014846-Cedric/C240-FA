@@ -131,6 +131,9 @@ app.get("/task-management", (req, res) => {
 });
 
 // New feature pages
+ app.get("/build", (req, res) => {
+    res.sendFile(path.join(__dirname, "views/build.html"));
+  });
 app.get("/investing", (req, res) => res.render("investing"));
 app.get("/budgeting", (req, res) => res.render("budgeting"));
 app.get("/careers", (req, res) => res.render("careers"));
