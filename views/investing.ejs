@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Investing Coach</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/styles.css" />
 
   <style>
     /* Video container styling */
@@ -15,7 +15,7 @@
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid #233055;
-      background: #0b132b;
+      background: lightblue;
     }
 
     .video-wrapper video {
@@ -24,6 +24,31 @@
       width: 100%;
       height: 100%;
     }
+
+    /* Simple agent UI styling (matches your card layout) */
+    .agent-output {
+      border: 1px solid lightblue;
+      background: lightblue;
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 80px;
+      white-space: pre-wrap;
+      line-height: 1.35;
+    }
+
+    .agent-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .agent-row input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid lightblue;
+      outline: none;
+    }
   </style>
 </head>
 
@@ -31,10 +56,10 @@
   <%- include("partials/navbar") %>
   <div class="container">
 
-    <header class="page-header">
-      <h1>Investing Coach</h1>
-      <p class="subtitle">Simple ETF-based investing guidance for beginners.</p>
-    </header>
+  <header class="page-header">
+    <h1>📈 Investing Coach</h1>
+    <p class="subtitle">Simple ETF-based investing guidance for beginners.</p>
+  </header>
 
     <!-- Walkthrough Video -->
     <div class="card">
@@ -42,7 +67,8 @@
 
       <div class="video-wrapper">
         <video controls preload="metadata">
-          <source src="videos/Investing Coach Guide.mp4" type="video/mp4">
+          <!-- NOTE: if your video is in /public/videos, use /videos/... -->
+          <source src="/videos/Investing Coach Guide.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -73,7 +99,7 @@
 
         <div class="full">
           <label for="amount">Monthly Investment (SGD)</label>
-          <input type="number" id="amount" value="300" min="0">
+          <input type="number" id="amount" value="300" min="0" />
         </div>
       </div>
 
@@ -93,19 +119,39 @@
       </div>
       <pre id="plan">Click “Generate Plan” to create a plan.</pre>
     </div>
+
+    <!-- Bottom "ChatAgent" (custom UI) -->
+    <div class="card">
+      <h3 class="card-title">🤖 Ask the Investing Agent</h3>
+      <p class="subtitle" style="margin-top: -8px;">
+        Type a question and the agent will reply below.
+      </p>
+
+      <div id="agentReply" class="agent-output">
+        Ask anything like “What is DCA?” or “How should I start investing?”
+      </div>
+
+      <div class="agent-row">
+        <input
+          id="agentMsg"
+          placeholder="Type your question..."
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter'){ event.preventDefault(); askAgent(); }"
+        />
+        <button type="button" onclick="askAgent()">Send</button>
+      </div>
+    </div>
   </div>
 
   <script>
+    // ---------- Your existing plan generator ----------
     function generate() {
       const goal = document.getElementById("goal").value;
       const risk = document.getElementById("risk").value;
       const amt = document.getElementById("amount").value;
 
-      const equityPct = risk === "high"
-        ? "80–100%"
-        : risk === "medium"
-          ? "60–70%"
-          : "40–50%";
+      const equityPct =
+        risk === "high" ? "80–100%" : risk === "medium" ? "60–70%" : "40–50%";
 
       document.getElementById("plan").textContent =
 `Profile Summary
@@ -148,6 +194,54 @@ Step-by-step:
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 1400);
     }
+
+    // ---------- Bottom "ChatAgent" -> calls Flowise REST API ----------
+    // This uses your chatagent chatflowid: 398a071d-8448-4214-b34b-7cde7ca1c1c9
+    async function askAgent() {
+      const msgEl = document.getElementById("agentMsg");
+      const outEl = document.getElementById("agentReply");
+
+      const question = (msgEl.value || "").trim();
+      if (!question) return;
+
+      outEl.textContent = "Thinking...";
+      msgEl.value = "";
+
+      try {
+        const res = await fetch(
+          "https://flowise-production-ee50.up.railway.app/api/v1/prediction/398a071d-8448-4214-b34b-7cde7ca1c1c9",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question })
+          }
+        );
+
+        const data = await res.json();
+
+        // Flowise commonly returns { text: "..."}; sometimes { answer: "..."} or other shapes.
+        const reply =
+          data.text ||
+          data.answer ||
+          data.response ||
+          (typeof data === "string" ? data : JSON.stringify(data, null, 2));
+
+        outEl.textContent = reply;
+      } catch (e) {
+        outEl.textContent =
+          "Error contacting agent. Please check your Flowise apiHost and chatflow ID.";
+      }
+    }
+  </script>
+
+  <!-- Floating Flowise Chatbot Widget (ONLY ONE init here) -->
+  <!-- This uses your chatbot chatflowid: 3cff5c06-4f53-4fc3-8791-be5514a32a03 -->
+  <script type="module">
+    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js";
+    Chatbot.init({
+      chatflowid: "3cff5c06-4f53-4fc3-8791-be5514a32a03",
+      apiHost: "https://flowise-production-ee50.up.railway.app",
+    });
   </script>
 </body>
 </html>
