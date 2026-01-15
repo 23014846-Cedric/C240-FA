@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Money & Career — Build</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Use SAME base stylesheet as index.ejs -->
+  <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Keep your libs -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <meta name="description" content="AI-powered assistant to manage finances and career for young adults" />
+
+  <style>
+    /* Make Build page match Index styling */
+    .hero {
+      margin-top: 18px;
+      padding: 22px;
+    }
+
+    .hero h1 {
+      font-size: 26px;
+      letter-spacing: .2px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: #a9b3d6;
+      line-height: 1.6;
+      max-width: 75ch;
+      margin-bottom: 0;
+    }
+
+    /* Wrap your entire app UI in a "tool-card" style */
+    .build-shell {
+      margin-top: 16px;
+      border: 1px solid #233055;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #111a33, #0c142b);
+      box-shadow: 0 0 40px rgba(0,0,0,.25);
+    }
+
+    /* Your build UI classes might come from styles2.css.
+       If you still need them, load it OR paste only needed parts here. */
+    .build-shell-inner {
+      padding: 16px;
+    }
+
+    /* Optional: spacing so your app header doesn't touch edges */
+    .app-header {
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    /* Make sidebar + main feel contained */
+    .app-shell {
+      border: 1px solid #233055;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(10, 16, 35, .6);
+    }
+
+    /* Video card align with theme */
+    .side-card {
+      background: rgba(13, 19, 40, .55);
+      border: 1px solid #233055;
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 0 30px rgba(0,0,0,.18);
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #233055;
+      background: #0b132b;
+      margin-top: 10px;
+    }
+
+    .video-wrapper video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 22px; }
+      .build-shell-inner { padding: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- ✅ Same placement as index.ejs -->
+    <%- include("partials/navbar") %>
+
+    <!-- Top intro card like index.ejs -->
+    <div class="card hero">
+      <h1>Money & Career — Build</h1>
+      <p>
+        Upload your bank CSV or paste JSON to auto-categorize transactions, generate insights,
+        alerts, and a simple forecast. (Prototype only — not financial advice.)
+      </p>
+    </div>
+
+    <!-- Main app wrapped to match index look -->
+    <div class="build-shell">
+      <div class="build-shell-inner">
+
+        <!-- Accessibility -->
+        <a class="skip-link" href="#main">Skip to main content</a>
+
+        <!-- Top App Header -->
+        <header class="app-header">
+          <div class="header-left">
+            <div class="brand">
+              <div class="brand-mark" aria-hidden="true">💸</div>
+              <div class="brand-text">
+                <h1>Money & Career</h1>
+                <p class="tagline">Upload → Categorize → Forecast → Alerts</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="pill">
+              <span class="dot dot--green" aria-hidden="true"></span>
+              <span>Local Prototype</span>
+            </div>
+
+            <button class="icon-btn" id="helpBtn" type="button" aria-label="Open help">?</button>
+            <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle theme">🌓</button>
+          </div>
+        </header>
+
+        <div class="app-shell">
+          <!-- Sidebar -->
+          <aside class="sidebar" aria-label="Sidebar navigation">
+            <nav class="side-nav">
+              <a class="side-link active" href="#ingest">📥 Ingest</a>
+              <a class="side-link" href="#dashboard">📊 Dashboard</a>
+              <a class="side-link" href="#transactions">🧾 Transactions</a>
+              <a class="side-link" href="#insightsPanel">🧠 Insights</a>
+            </nav>
+
+            <div class="side-card" style="margin-top:14px;">
+              <h3 class="side-card-title">Quick Tips</h3>
+              <ul class="side-list">
+                <li>CSV must include: <code>date</code>, <code>description</code>, <code>amount</code></li>
+                <li>Expenses should be negative (e.g. <code>-12.50</code>)</li>
+                <li>Income should be positive (e.g. <code>2500</code>)</li>
+              </ul>
+            </div>
+
+            <div class="side-card" style="margin-top:14px;">
+              <h3 class="side-card-title">Privacy</h3>
+              <p class="muted">
+                Don’t upload passwords or full account numbers. This prototype is for budgeting insights only (not financial advice).
+              </p>
+            </div>
+          </aside>
+
+          <!-- Main Content -->
+          <main id="main" class="main">
+            <!-- HERO / STATUS STRIP -->
+            <section class="status-strip" aria-label="Status">
+              <div class="status-item">
+                <span class="status-label">Dataset</span>
+                <span class="status-value" id="statusDataset">No file loaded</span>
+              </div>
+              <div class="status-item">
+                <span class="status-label">Rows</span>
+                <span class="status-value" id="statusRows">—</span>
+              </div>
+              <div class="status-item">
+                <span class="status-label">Last run</span>
+                <span class="status-value" id="statusRun">—</span>
+              </div>
+              <div class="status-item">
+                <span class="status-label">Alerts</span>
+                <span class="status-value" id="statusAlerts">—</span>
+              </div>
+            </section>
+
+            <!-- INGEST PANEL -->
+            <section id="ingest" class="panel" aria-labelledby="ingest-heading">
+              <div class="panel-head">
+                <div>
+                  <h2 id="ingest-heading">Ingest Bank Data</h2>
+                  <p class="muted">Upload a CSV exported from your bank, or paste JSON (array of transactions).</p>
+                </div>
+
+                <div class="panel-actions">
+                  <button class="btn btn--ghost" id="sampleBtn" type="button">Use Sample Data</button>
+                  <button class="btn btn--outline" id="downloadBtn" type="button" disabled>Download Categorized CSV</button>
+                </div>
+              </div>
+
+              <div class="tabs" role="tablist" aria-label="Input method">
+                <button class="tab active" id="tabCsv" type="button" role="tab" aria-selected="true" aria-controls="tabPanelCsv">
+                  CSV Upload
+                </button>
+                <button class="tab" id="tabJson" type="button" role="tab" aria-selected="false" aria-controls="tabPanelJson">
+                  Paste JSON
+                </button>
+              </div>
+
+              <div class="tab-panels">
+                <div id="tabPanelCsv" class="tab-panel active" role="tabpanel" aria-labelledby="tabCsv">
+                  <div class="controls">
+                    <label class="file-upload" title="Upload CSV">
+                      <span>Choose CSV</span>
+                      <input id="fileInput" type="file" accept="text/csv" />
+                    </label>
+
+                    <div class="field">
+                      <label for="thresholdInput">Overspend Threshold</label>
+                      <input id="thresholdInput" type="number" min="0" value="500" />
+                      <small class="hint">Used for alerts (e.g., category spend above this).</small>
+                    </div>
+
+                    <button class="btn btn--primary" id="sendBtn" type="button">Analyze Data</button>
+                  </div>
+
+                  <details class="sample">
+                    <summary>See required CSV format</summary>
+                    <pre>
+date,description,amount
+2026-01-01,Salary,3000
+2026-01-02,NTUC FairPrice,-78.45
+2026-01-03,Starbucks,-5.50
+2026-01-04,Rent,-1800
+                    </pre>
+                  </details>
+                </div>
+
+                <div id="tabPanelJson" class="tab-panel" role="tabpanel" aria-labelledby="tabJson">
+                  <div class="controls">
+                    <button class="btn btn--secondary" id="pasteJsonBtn" type="button">Show JSON Box</button>
+                    <button class="btn btn--primary" id="sendBtnJson" type="button">Analyze JSON</button>
+                  </div>
+
+                  <textarea
+                    id="jsonInput"
+                    class="hidden"
+                    aria-label="paste transactions as JSON"
+                    placeholder='[ {"date":"2026-01-01","description":"Coffee","amount":-3.5} ]'></textarea>
+
+                  <p class="muted small">
+                    JSON must be an array of objects with keys: <code>date</code>, <code>description</code>, <code>amount</code>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="notice">
+                <strong>What happens when you analyze?</strong>
+                <span class="muted">We validate rows → categorize → compute insights → generate alerts + forecast.</span>
+              </div>
+            </section>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="panel" aria-labelledby="dashboard-heading">
+              <div class="panel-head">
+                <div>
+                  <h2 id="dashboard-heading">Dashboard</h2>
+                  <p class="muted">High-level overview after your data is analyzed.</p>
+                </div>
+              </div>
+
+              <div class="kpi-grid" aria-label="Key metrics">
+                <div class="kpi">
+                  <div class="kpi-label">Total Income</div>
+                  <div class="kpi-value" id="kpiIncome">$—</div>
+                  <div class="kpi-sub" id="kpiIncomeNote">—</div>
+                </div>
+
+                <div class="kpi">
+                  <div class="kpi-label">Total Expenses</div>
+                  <div class="kpi-value" id="kpiExpenses">$—</div>
+                  <div class="kpi-sub" id="kpiExpenseNote">—</div>
+                </div>
+
+                <div class="kpi">
+                  <div class="kpi-label">Net</div>
+                  <div class="kpi-value" id="kpiNet">$—</div>
+                  <div class="kpi-sub" id="kpiNetNote">—</div>
+                </div>
+
+                <div class="kpi kpi--alert">
+                  <div class="kpi-label">Alerts</div>
+                  <div class="kpi-value" id="kpiAlerts">—</div>
+                  <div class="kpi-sub" id="kpiAlertsNote">—</div>
+                </div>
+              </div>
+
+              <div class="split">
+                <div class="card">
+                  <h3>🚨 Alerts</h3>
+                  <div id="alertsBox" class="empty-state">Run analysis to generate alerts.</div>
+                </div>
+
+                <div class="card">
+                  <h3>🔮 30-Day Forecast</h3>
+                  <div id="forecastBox" class="empty-state">Forecast will appear here (avg daily inflow/outflow + projection).</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- TRANSACTIONS -->
+            <section id="transactions" class="panel" aria-labelledby="transactions-heading">
+              <div class="panel-head">
+                <div>
+                  <h2 id="transactions-heading">Transactions</h2>
+                  <p class="muted">Review, search, and check how each transaction is categorized.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="search">
+                    <input id="searchInput" type="search" placeholder="Search description or category..." aria-label="Search transactions" />
+                  </div>
+                </div>
+              </div>
+
+              <div id="summary" class="summary" aria-live="polite"></div>
+              <div id="tableWrap" class="table-wrap"></div>
+            </section>
+
+            <!-- INSIGHTS -->
+            <section id="insightsPanel" class="panel" aria-labelledby="insights-heading">
+              <div class="panel-head">
+                <div>
+                  <h2 id="insights-heading">Insights</h2>
+                  <p class="muted">Totals, top categories, top merchants, patterns, and recurring charges.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <span class="badge badge--info">Beginner friendly</span>
+                  <span class="badge badge--muted">No investment advice</span>
+                </div>
+              </div>
+
+              <div id="insights" class="insights"></div>
+            </section>
+
+            <div class="side-card" style="margin-top:14px;">
+              <h3 class="side-card-title">📺 How to Use Investing Coach</h3>
+              <div class="video-wrapper">
+                <video controls preload="metadata">
+                  <source src="videos/Money & Career Explainer.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </main>
+        </div>
+
+        <footer class="site-footer" style="margin-top:14px;">
+          <small>Money & Career — Prototype • Run with <code>node app.js</code></small>
+        </footer>
+
+        <div id="toastRoot" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Botpress Webchat Integration -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/01/14/11/20260114112906-AXZ73TRO.js" defer></script>
+
+  <!-- Your main app JS -->
+  <script src="/js/app.js" defer></script>
+</body>
+</html>
