@@ -2,6 +2,655 @@
    Module-Specific Styles
    ======================================== */
 
+/* === Career Wizard Styles === */
+.career-wizard {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.wizard-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.wizard-header h1 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    margin: var(--spacing-md) 0;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transition: width 0.3s ease;
+}
+
+.step-indicator {
+    color: var(--neutral-medium);
+    font-size: 0.9rem;
+    margin-top: var(--spacing-xs);
+}
+
+.wizard-content {
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.wizard-step h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.step-description {
+    color: var(--neutral-medium);
+    margin-bottom: var(--spacing-lg);
+}
+
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.skills-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.skills-section h3 {
+    color: var(--neutral-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.skills-section > p {
+    color: var(--neutral-medium);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.skills-list {
+    background: var(--neutral-bg);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    min-height: 60px;
+}
+
+.empty-state {
+    color: var(--neutral-medium);
+    font-style: italic;
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: var(--white);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 20px;
+    margin: var(--spacing-xs);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.skill-tag span {
+    font-size: 0.9rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--error-color);
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.btn-icon:hover {
+    background: rgba(244, 67, 54, 0.1);
+}
+
+.skill-input-group {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.skill-input-group input,
+.skill-input-group select {
+    flex: 1;
+    min-width: 200px;
+}
+
+.skill-input-group button {
+    flex-shrink: 0;
+}
+
+.skill-guide {
+    background: #e3f2fd;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.skill-guide h4 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.skill-guide ul {
+    margin-left: var(--spacing-md);
+}
+
+.skill-guide li {
+    margin-bottom: var(--spacing-xs);
+    color: var(--neutral-dark);
+}
+
+.role-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+}
+
+.role-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--neutral-bg);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.role-option:hover {
+    background: #f0f7ff;
+    border-color: var(--secondary-color);
+}
+
+.role-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.role-option input[type="checkbox"]:checked + span {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.review-section {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.review-section:last-child {
+    border-bottom: none;
+}
+
+.review-section h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.review-content p {
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.6;
+}
+
+.missing {
+    color: var(--error-color);
+    font-style: italic;
+}
+
+.warning-text {
+    color: var(--warning-color);
+}
+
+.skills-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.skill-badge {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.loading-container {
+    text-align: center;
+    padding: var(--spacing-xxl);
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #e0e0e0;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--spacing-lg);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* === Dashboard Results Styles === */
+.career-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-header h1 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.dashboard-section {
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-section h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.section-description {
+    color: var(--neutral-medium);
+    margin-bottom: var(--spacing-lg);
+}
+
+.match-overview {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--neutral-bg);
+    border-radius: var(--radius-md);
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.score-circle.high {
+    background: linear-gradient(135deg, #4CAF50, #81C784);
+    color: white;
+}
+
+.score-circle.medium {
+    background: linear-gradient(135deg, #FFA726, #FFB74D);
+    color: white;
+}
+
+.score-circle.low {
+    background: linear-gradient(135deg, #EF5350, #E57373);
+    color: white;
+}
+
+.score-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.score-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.skills-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.matched-skills,
+.missing-skills {
+    background: var(--neutral-bg);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+}
+
+.skill-item {
+    background: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-item.matched {
+    border-left: 4px solid #4CAF50;
+}
+
+.skill-item.missing {
+    border-left: 4px solid #FFA726;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.skill-name {
+    font-weight: 600;
+    color: var(--neutral-dark);
+}
+
+.skill-level {
+    color: var(--neutral-medium);
+    font-size: 0.9rem;
+}
+
+.priority-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: var(--spacing-sm);
+}
+
+.priority-badge.high {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+.priority-badge.medium {
+    background: #FFF3E0;
+    color: #E65100;
+}
+
+.priority-badge.low {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.roadmap-phases {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.roadmap-phase {
+    background: var(--neutral-bg);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+}
+
+.roadmap-phase h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.roadmap-phase > p {
+    color: var(--neutral-medium);
+    margin-bottom: var(--spacing-md);
+}
+
+.phase-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.roadmap-item {
+    background: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--accent-color);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.item-header h4 {
+    color: var(--neutral-dark);
+    margin: 0;
+}
+
+.item-reason {
+    color: var(--neutral-medium);
+    font-size: 0.85rem;
+    margin: var(--spacing-xs) 0;
+    font-style: italic;
+}
+
+.effort-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.effort-badge.high {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+.effort-badge.medium {
+    background: #FFF3E0;
+    color: #E65100;
+}
+
+.item-activity,
+.item-resources {
+    color: var(--neutral-dark);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: var(--spacing-xs) 0;
+}
+
+.empty-phase {
+    text-align: center;
+    color: var(--neutral-medium);
+    font-style: italic;
+    padding: var(--spacing-md);
+}
+
+.application-materials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.material-card {
+    background: var(--neutral-bg);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+}
+
+.material-card h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.material-card > p {
+    color: var(--neutral-medium);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.content-box {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+    min-height: 200px;
+    line-height: 1.8;
+    color: var(--neutral-dark);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.content-box.editable {
+    border: 2px dashed #e0e0e0;
+}
+
+.content-box.editable:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.bullet-item {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.bullet-item:last-child {
+    border-bottom: none;
+}
+
+.bullet-number {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.material-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.linkedin-profile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.profile-field {
+    background: var(--neutral-bg);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+}
+
+.profile-field h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.profile-field > p {
+    color: var(--neutral-medium);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.skill-tag-display {
+    background: var(--primary-color);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.keywords-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.keyword-badge {
+    background: var(--secondary-light);
+    color: var(--secondary-color);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.dashboard-footer {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.btn-large {
+    padding: 14px 32px;
+    font-size: 1.1rem;
+}
+
+.btn-accent {
+    background: var(--accent-color);
+    color: white;
+}
+
+.btn-accent:hover {
+    background: #F57C00;
+}
+
 /* === Common Module Elements === */
 .module-dashboard {
     display: grid;

@@ -92,12 +92,64 @@
         <h2 class="section-title">Everything You Need to Succeed</h2>
 
         <div class="features-grid">
-            <div class="feature-card"><i class="fas fa-wallet"></i><h3>Finance Tracking</h3></div>
-            <div class="feature-card"><i class="fas fa-chart-pie"></i><h3>Investing Coach</h3></div>
-            <div class="feature-card"><i class="fas fa-briefcase"></i><h3>Career Mapping</h3></div>
-            <div class="feature-card"><i class="fas fa-user-tie"></i><h3>Interview Prep</h3></div>
-            <div class="feature-card"><i class="fas fa-tasks"></i><h3>Task Prioritization</h3></div>
-            <div class="feature-card"><i class="fas fa-calendar-check"></i><h3>Meeting Follow-ups</h3></div>
+            <div class="feature-card">
+                <div class="feature-icon finance-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3>Finance Tracking</h3>
+                <p>Monitor expenses, set budgets, and get personalized savings recommendations</p>
+                <a href="/finance" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon investing-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3>Investing Coach</h3>
+                <p>Learn investment strategies tailored to your goals and risk tolerance</p>
+                <a href="/investing" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon career-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3>Career Transformation</h3>
+                <p>Map current skills to target roles, generate learning roadmaps, draft tailored applications and LinkedIn profiles</p>
+                <ul style="text-align: left; margin-top: 0.75rem; padding-left: 1.5rem; font-size: 0.875rem; color: var(--neutral-medium);">
+                    <li>Skill-to-role mapping with gap analysis</li>
+                    <li>Personalized learning roadmaps</li>
+                    <li>Application & profile drafting</li>
+                </ul>
+                <a href="/career" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon interview-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3>Interview Preparation</h3>
+                <p>Practice common questions and get AI-powered feedback on your answers</p>
+                <a href="/interview" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon tasks-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Task Prioritization</h3>
+                <p>Organize your to-dos with intelligent prioritization and time blocking</p>
+                <a href="/tasks" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon meetings-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Meeting Follow-ups</h3>
+                <p>Summarize meetings, track action items, and draft follow-up messages</p>
+                <a href="/meetings" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
         </div>
     </div>
 </section>
@@ -139,12 +191,21 @@
 
 <!-- ================= BOTPRESS (FIXED v3) ================= -->
 <!-- ================= BOTPRESS WEBCHAT (V2 – CORRECT) ================= -->
-    <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+<script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/14/13/20260114135008-2V5YUBU9.js" defer></script>
 <script>
     function openChatbot() {
         window.botpressWebChat.open();
     }
 </script>
+
+<!-- ================= APPLICATION SCRIPTS ================= -->
+<script src="/js/main.js"></script>
+<script src="/js/modules/financeModule.js"></script>
+<script src="/js/modules/investingModule.js"></script>
+<script src="/js/modules/careerModule.js"></script>
+<script src="/js/modules/interviewModule.js"></script>
+<script src="/js/modules/tasksModule.js"></script>
+<script src="/js/modules/meetingsModule.js"></script>
 </body>
 </html>

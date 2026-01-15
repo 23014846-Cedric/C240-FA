@@ -48,7 +48,22 @@ c:\FA_Rajeev\
 - **Success:** #43A047 (Success Green)
 - **Warning:** #FB8C00 (Amber)
 
-## 🤖 AI Agent Modules
+## 🎯 Project Team Roles
+
+### Career Development Specialist (This Module)
+**Responsibilities:**
+- Map current skills to target roles
+- Generate personalized learning roadmaps
+- Draft tailored job applications
+- Create optimized LinkedIn profiles
+
+**Technologies Used:**
+- JavaScript ES6+ for module logic
+- LocalStorage for data persistence
+- AI integration for content generation
+- Dynamic UI rendering with templates
+
+---
 
 ### 1. Finance Tracking
 - Track expenses by category
