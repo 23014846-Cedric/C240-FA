@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Money & Career - AI-powered assistant for financial management and career development">
+    <meta name="keywords" content="finance, career, AI assistant, money management, career planning">
+    <meta name="author" content="Money & Career">
+    <title><%= title %> | Money & Career</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/modules.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-chart-line brand-icon"></i>
+                <span class="brand-name">Money & Career</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="<%= activeModule === 'home' ? 'active' : '' %>">
+                    <i class="fas fa-home"></i> Home
+                </a></li>
+                <li><a href="/finance" class="<%= activeModule === 'finance' ? 'active' : '' %>">
+                    <i class="fas fa-wallet"></i> Finance
+                </a></li>
+                <li><a href="/investing" class="<%= activeModule === 'investing' ? 'active' : '' %>">
+                    <i class="fas fa-chart-pie"></i> Investing
+                </a></li>
+                <li><a href="/career" class="<%= activeModule === 'career' ? 'active' : '' %>">
+                    <i class="fas fa-briefcase"></i> Career
+                </a></li>
+                <li><a href="/interview" class="<%= activeModule === 'interview' ? 'active' : '' %>">
+                    <i class="fas fa-user-tie"></i> Interview
+                </a></li>
+                <li><a href="/tasks" class="<%= activeModule === 'tasks' ? 'active' : '' %>">
+                    <i class="fas fa-tasks"></i> Tasks
+                </a></li>
+                <li><a href="/meetings" class="<%= activeModule === 'meetings' ? 'active' : '' %>">
+                    <i class="fas fa-calendar-check"></i> Meetings
+                </a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Home Page) -->
+    <% if (activeModule === 'home') { %>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Take Control of Your <span class="highlight">Money</span> & <span class="highlight">Career</span></h1>
+                <p class="hero-subtitle">AI-powered guidance to help you make smarter financial decisions, advance your career, and stay organized—with less stress.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="openChatbot()">
+                        <i class="fas fa-robot"></i> Chat with AI Assistant
+                    </button>
+                    <a href="/finance" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> Get Started
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-card">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Track Your Growth</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Everything You Need to Succeed</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon finance-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Finance Tracking</h3>
+                    <p>Monitor expenses, set budgets, and get personalized savings recommendations</p>
+                    <a href="/finance" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon investing-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Investing Coach</h3>
+                    <p>Learn investment strategies tailored to your goals and risk tolerance</p>
+                    <a href="/investing" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon career-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>Career Mapping</h3>
+                    <p>Plan your career path with actionable steps and milestone tracking</p>
+                    <a href="/career" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon interview-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Interview Prep</h3>
+                    <p>Practice common questions and get AI-powered feedback on your answers</p>
+                    <a href="/interview" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon tasks-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Task Prioritization</h3>
+                    <p>Organize your to-dos with intelligent prioritization and time blocking</p>
+                    <a href="/tasks" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon meetings-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Meeting Follow-ups</h3>
+                    <p>Summarize meetings, track action items, and draft follow-up messages</p>
+                    <a href="/meetings" class="feature-link">Explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <% } %>
+
+    <!-- Module Content -->
+    <% if (activeModule !== 'home') { %>
+    <section class="module-content">
+        <div class="container">
+            <div class="module-header">
+                <h1 class="module-title"><%= title %></h1>
+                <button class="btn btn-primary" onclick="openChatbot()">
+                    <i class="fas fa-robot"></i> Ask AI Assistant
+                </button>
+            </div>
+            
+            <div id="moduleContainer" class="module-container">
+                <!-- Module-specific content will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </section>
+    <% } %>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Financial Future?</h2>
+            <p>Start your journey to financial confidence and career success today</p>
+            <button class="btn btn-primary btn-large" onclick="openChatbot()">
+                <i class="fas fa-robot"></i> Chat with Your AI Assistant
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-chart-line brand-icon"></i>
+                    <span class="brand-name">Money & Career</span>
+                    <p>Empowering young adults to achieve financial stability and career success</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/finance">Finance</a></li>
+                        <li><a href="/career">Career</a></li>
+                        <li><a href="/tasks">Tasks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Money & Career. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botpress Chatbot Integration -->
+    <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/01/14/13/20260114135008-U5DKBRGJ.json"></script>
+    <script>
+        // Initialize Botpress chatbot
+        window.botpress = {
+            config: {
+                botId: 'U5DKBRGJ',
+                hostUrl: 'https://cdn.botpress.cloud',
+                messagingUrl: 'https://messaging.botpress.cloud',
+                clientId: 'U5DKBRGJ',
+                enableConversationDeletion: true,
+                showPoweredBy: true,
+                stylesheet: 'https://files.bpcontent.cloud/2026/01/14/13/20260114135008-U5DKBRGJ.json'
+            }
+        };
+
+        // Function to open chatbot
+        function openChatbot() {
+            if (window.botpressWebChat) {
+                window.botpressWebChat.sendEvent({ type: 'show' });
+            }
+        }
+    </script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2026/01/14/13/20260114135008-U5DKBRGJ.json"></script>
+
+    <!-- JavaScript Files -->
+    <script src="/js/main.js"></script>
+    <script src="/js/modules/financeModule.js"></script>
+    <script src="/js/modules/investingModule.js"></script>
+    <script src="/js/modules/careerModule.js"></script>
+    <script src="/js/modules/interviewModule.js"></script>
+    <script src="/js/modules/tasksModule.js"></script>
+    <script src="/js/modules/meetingsModule.js"></script>
+</body>
+</html>

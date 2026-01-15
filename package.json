@@ -1,0 +1,21 @@
+{
+  "name": "money-and-career",
+  "version": "1.0.0",
+  "description": "AI-powered assistant for financial management and career development",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": ["finance", "career", "ai-assistant", "productivity"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
