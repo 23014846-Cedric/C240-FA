@@ -1,3 +1,63 @@
+/* ============================= */
+/*         NAVBAR                */
+/* ============================= */
+.navbar{
+  background: linear-gradient(90deg, #0d1328, var(--panel));
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-menu{
+  list-style:none;
+  display:flex;
+  gap:28px;
+  align-items:center;
+}
+
+.nav-menu li{ position:relative; }
+
+.nav-menu a{
+  text-decoration:none;
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:.3px;
+  color:var(--muted);
+  padding:8px 2px;
+  transition: all .25s ease;
+}
+
+.nav-menu a:hover{
+  color:var(--accent);
+  text-shadow: 0 0 8px rgba(102,227,255,.6);
+}
+
+.nav-menu a.active{
+  color:var(--accent);
+  font-weight:600;
+}
+
+.nav-menu a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0%;
+  height:2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after{
+  width:100%;
+}
+/* ============================= */
+ /*       GLOBAL STYLES          */
+ /* ============================= */
 :root{
   --bg:#f6f8fc;
   --panel:#ffffff;
