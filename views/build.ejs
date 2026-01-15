@@ -4,21 +4,18 @@
   <meta charset="UTF-8" />
   <title>Money & Career — Build</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Use SAME base stylesheet as index.ejs -->
+  <!-- Unified stylesheet with all styles merged -->
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/styles2.css">
 
   <!-- Keep your libs -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <meta name="description" content="AI-powered assistant to manage finances and career for young adults" />
+</head>
 
-  <body>
+<body>
+  <%- include("partials/navbar") %>
   <div class="container">
-    <!-- ✅ Same placement as index.ejs -->
-    <%- include("partials/navbar") %>
-
     <!-- Top intro card like index.ejs -->
     <div class="card hero">
       <h1>Money & Career — Build</h1>

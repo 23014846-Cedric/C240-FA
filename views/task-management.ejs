@@ -38,9 +38,10 @@
       }
   </style>
 </head>
+
 <body>
-  <div class="container">
   <%- include('partials/navbar') %>
+  <div class="container">
     <header class="page-header">
       <h1>📋 Task Management System</h1>
       <p class="subtitle">Upload your Excel file and manage tasks efficiently</p>
@@ -155,10 +156,6 @@
       </section>
 
       <!-- n8n Chat -->
-      <section class="card">
-        <div class="section-header">
-          <h3 class="card-title">Assistant</h3>
-        </div>
         <div id="n8n-chat"></div>
 
         <link
@@ -175,7 +172,19 @@
           });
         </script>
       </section>
+    
+      <!-- Frontend logic -->
+      <script src="/js/main.js"></script>
+      <script type="module" src="/chat.js"></script>
 
+      <flowise-fullchatbot></flowise-fullchatbot>
+      <script type="module">
+        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+        Chatbot.initFull({
+          chatflowid: "6b288294-b9aa-485e-8cf1-9e04a42b9c86",
+          apiHost: "https://flowise-production-9ba5.up.railway.app",
+        })
+      </script>
     </main>
 
     <footer class="footer">
@@ -183,18 +192,6 @@
     </footer>
   </div>
 
-  <!-- Frontend logic -->
-  <script src="/js/main.js"></script>
-  <script type="module" src="/chat.js"></script>
-
-  <flowise-fullchatbot></flowise-fullchatbot>
-  <script type="module">
-    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
-    Chatbot.initFull({
-      chatflowid: "6b288294-b9aa-485e-8cf1-9e04a42b9c86",
-      apiHost: "https://flowise-production-9ba5.up.railway.app",
-    })
-  </script>
 
 </body>
 </html>
