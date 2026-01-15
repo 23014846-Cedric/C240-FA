@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OfferUp Coach</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>OfferUp Coach</h1>
+        <p class="tagline">Practice interviews, get feedback, and draft negotiation scripts.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Role setup -->
+      <section id="role-setup" aria-labelledby="role-heading">
+        <h2 id="role-heading">Role Setup</h2>
+        <form id="role-form">
+          <label>Role title<input id="role-title" type="text" placeholder="Product Designer" /></label>
+          <label>Seniority
+            <select id="role-seniority">
+              <option value="intern">Intern</option>
+              <option value="junior">Junior</option>
+              <option value="mid">Mid</option>
+              <option value="senior">Senior</option>
+            </select>
+          </label>
+          <label>Industry<input id="role-industry" type="text" placeholder="FinTech"/></label>
+          <label>Location<input id="role-location" type="text" placeholder="San Francisco, CA"/></label>
+          <label>Job description (optional)
+            <textarea id="role-desc" rows="3" placeholder="Paste job description..."></textarea>
+          </label>
+          <label>Skills (comma-separated)
+            <input id="role-skills" type="text" placeholder="design, research, prototyping"/>
+          </label>
+          <div class="controls">
+            <button id="save-role" type="button">Save Role</button>
+            <button id="start-practice" type="button">Start Practicing</button>
+          </div>
+        </form>
+      </section>
+      <!-- Interview practice section -->
+      <section id="interview-practice" aria-labelledby="practice-heading">
+        <h2 id="practice-heading">Interview Practice</h2>
+
+        <div class="practice-controls">
+          <label>Category
+            <select id="question-category">
+              <option value="Behavioral">Behavioral</option>
+              <option value="Technical">Technical</option>
+              <option value="Leadership">Leadership</option>
+              <option value="Culture">Culture-fit</option>
+              <option value="Situational">Situational</option>
+            </select>
+          </label>
+          <label>Difficulty
+            <select id="question-difficulty">
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </label>
+          <label class="timer">
+            Timer
+            <div class="timer-controls">
+              <span id="timer-display">00:00</span>
+              <button id="timer-start" type="button">Start</button>
+              <button id="timer-pause" type="button">Pause</button>
+            </div>
+          </label>
+          <label class="wordcount">Words: <span id="word-count">0</span></label>
+          <label class="record-mode">Record mode
+            <button id="record-toggle" type="button">Enable (placeholder)</button>
+          </label>
+        </div>
+
+        <div class="question-area">
+          <button id="prev-q" aria-label="Previous question">◀</button>
+          <div class="question-card">
+            <h3 id="question-text">Loading question...</h3>
+            <p class="hint">Tip: Use STAR (Situation, Task, Action, Result)</p>
+          </div>
+          <button id="next-q" aria-label="Next question">▶</button>
+        </div>
+
+        <label for="answer" class="sr-only">Your answer</label>
+        <textarea id="answer" placeholder="Type your answer here..." rows="6"></textarea>
+        <div class="controls">
+          <button id="submit-answer">Get Feedback</button>
+          <button id="save-answer">Save Locally</button>
+          <button id="export-answers" type="button">Export Answers</button>
+          <label for="import-file" class="sr-only">Import answers JSON</label>
+          <input id="import-file" type="file" accept="application/json" style="display:none" />
+          <button id="import-answers" type="button">Import Answers</button>
+        </div>
+
+        <div id="feedback" aria-live="polite" class="feedback">
+          <h4>Feedback</h4>
+          <div id="rubric-score" class="rubric-score">Score: —</div>
+          <ul id="feedback-list"></ul>
+          <div id="improved-answer">
+            <h5>Improved answer suggestion</h5>
+            <pre id="improved-text">(click 'Get Feedback' to generate)</pre>
+          </div>
+        </div>
+
+        <div class="session-controls">
+          <button id="save-session">Save Session</button>
+          <button id="view-sessions">View Sessions</button>
+          <button id="export-top" type="button">Export Top Feedback & Scripts</button>
+        </div>
+
+        <div id="session-list" class="session-list" hidden>
+          <h4>Recent Sessions</h4>
+          <ul id="sessions"></ul>
+        </div>
+      </section>
+
+      <!-- Negotiation helper section -->
+      <section id="negotiation" aria-labelledby="neg-heading">
+        <h2 id="neg-heading">Negotiation Script Generator</h2>
+        <form id="neg-form">
+          <label>
+            Your name
+            <input type="text" id="neg-name" placeholder="Alex" />
+          </label>
+          <label>
+            Role / Title
+            <input type="text" id="neg-role" placeholder="Product Designer" />
+          </label>
+          <label>
+            Company
+            <input type="text" id="neg-company" placeholder="Acme Corp" />
+          </label>
+          <label>
+            Current / Offered Salary
+            <input type="text" id="neg-salary" placeholder="$85,000" />
+          </label>
+          <label>
+            Desired / Target Salary (optional)
+            <input type="text" id="neg-desired" placeholder="$95,000" />
+          </label>
+          <label>
+            Tone
+            <select id="neg-tone">
+              <option value="professional">Professional</option>
+              <option value="friendly">Friendly</option>
+              <option value="direct">Direct</option>
+            </select>
+          </label>
+          <div class="controls">
+            <button id="generate-neg" type="button">Generate Script</button>
+            <button id="copy-neg" type="button">Copy</button>
+          </div>
+        </form>
+
+        <pre id="neg-output" class="neg-output" aria-live="polite">Your negotiation script will appear here.</pre>
+      </section>
+    </main>
+
+    <flowise-fullchatbot></flowise-fullchatbot>
+    <script type="module">
+        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+        Chatbot.initFull({
+            chatflowid: "3603c6b4-7667-4c97-9231-1481b29d55f8",
+            apiHost: "https://flowise-production-c4be.up.railway.app",
+        })
+    </script>
+
+
+    <footer class="site-footer">
+      <div class="container">Built for students & young professionals — OfferUp Coach</div>
+    </footer>
+
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>
