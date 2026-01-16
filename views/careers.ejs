@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Money & Career - AI-powered assistant for financial management and career development">
+    <meta name="keywords" content="finance, career, AI assistant, money management, career planning">
+    <meta name="author" content="Money & Career">
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+    <title><%= title || 'Home' %> | Money & Career</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <%- include('partials/navbar') %>
+  <div class="container">
+
+<!-- ================= HOME ================= -->
+<% if (activeModule === 'home') { %>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Take Control of Your <span class="highlight">Money</span> & <span class="highlight">Career</span></h1>
+            <p>AI-powered guidance to help you make smarter financial decisions and career moves.</p>
+
+            <div class="hero-buttons">
+                <!-- <button class="btn btn-primary" onclick="openChatbot()">
+                    <i class="fas fa-robot"></i> Chat with AI Assistant
+                </button> -->
+                <a href="/finance" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i> Get Started
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <div class="floating-card">
+                <i class="fas fa-chart-line"></i>
+                <span>Track Your Growth</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Everything You Need to Succeed</h2>
+
+        <div class="features-grid">
+            <div class="feature-card"><i class="fas fa-wallet"></i><h3>Finance Tracking</h3></div>
+            <div class="feature-card"><i class="fas fa-chart-pie"></i><h3>Investing Coach</h3></div>
+            <div class="feature-card"><i class="fas fa-briefcase"></i><h3>Career Mapping</h3></div>
+            <div class="feature-card"><i class="fas fa-user-tie"></i><h3>Interview Prep</h3></div>
+            <div class="feature-card"><i class="fas fa-tasks"></i><h3>Task Prioritization</h3></div>
+            <div class="feature-card"><i class="fas fa-calendar-check"></i><h3>Meeting Follow-ups</h3></div>
+        </div>
+    </div>
+</section>
+
+<% } %>
+
+<!-- ================= MODULE ================= -->
+<% if (activeModule !== 'home') { %>
+<section class="module-content">
+    <div class="container">
+        <div class="module-header">
+            <h1><%= title %></h1>
+            <button class="btn btn-primary" onclick="openChatbot()">
+                <i class="fas fa-robot"></i> Ask AI Assistant
+            </button>
+        </div>
+
+        <div id="moduleContainer">
+          <!-- Your Background Section -->
+          <section class="card">
+            <div class="section-header">
+              <h2>📚 Your Background</h2>
+              <p class="subtitle">Tell us about your current education and career stage</p>
+            </div>
+
+            <form id="backgroundForm" class="form-stack">
+              <!-- Education Level / Career Stage -->
+              <div class="form-group">
+                <label for="educationLevel">Education Level / Career Stage <span class="required">*</span></label>
+                <select id="educationLevel" name="educationLevel" required>
+                  <option value="">Select your current stage...</option>
+                  <option value="high-school">High School Student</option>
+                  <option value="undergraduate">Undergraduate Student</option>
+                  <option value="graduate">Graduate Student</option>
+                  <option value="entry-level">Entry Level Professional</option>
+                  <option value="mid-career">Mid-Career Professional</option>
+                  <option value="senior">Senior Professional</option>
+                  <option value="executive">Executive/Leadership</option>
+                  <option value="transitioning">Career Transitioning</option>
+                  <option value="self-employed">Self-Employed/Entrepreneur</option>
+                </select>
+              </div>
+
+              <!-- Current Field of Study / Job Title -->
+              <div class="form-group">
+                <label for="fieldOfStudy">Current Field of Study / Job Title <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  id="fieldOfStudy" 
+                  name="fieldOfStudy" 
+                  placeholder="e.g., Computer Science Student, Software Engineer, Product Manager"
+                  required>
+                <small class="helper-text">Be specific - this helps us understand your starting point</small>
+              </div>
+
+              <!-- Years of Experience -->
+              <div class="form-group">
+                <label for="yearsExperience">Years of Experience</label>
+                <input 
+                  type="number" 
+                  id="yearsExperience" 
+                  name="yearsExperience" 
+                  min="0" 
+                  placeholder="0"
+                  value="0">
+                <small class="helper-text">Enter 0 if you're a student or recent graduate</small>
+              </div>
+
+              <!-- Certifications / Completed Courses -->
+              <div class="form-group">
+                <label for="certifications">Certifications / Completed Courses <span class="optional">(optional)</span></label>
+                <textarea 
+                  id="certifications" 
+                  name="certifications" 
+                  placeholder="e.g., AWS Certified Developer, Google Data Analytics, etc."
+                  rows="4"></textarea>
+                <small class="helper-text">Separate multiple items with commas</small>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Background</button>
+                <button type="reset" class="btn btn-secondary">Clear</button>
+              </div>
+            </form>
+          </section>
+        </div>
+    </div>
+</section>
+<% } %>
+
+<!-- ================= CTA ================= -->
+<!-- <section class="cta-section">
+    <div class="container">
+        <h2>Ready to Transform Your Financial Future?</h2>
+        <button class="btn btn-primary btn-large" onclick="openChatbot()">
+            <i class="fas fa-robot"></i> Chat with AI Assistant
+        </button>
+    </div>
+</section> -->
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2026 Money & Career. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- ================= BOTPRESS (FIXED v3) ================= -->
+<!-- ================= BOTPRESS WEBCHAT (V2 – CORRECT) ================= -->
+    <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2026/01/14/13/20260114135008-2V5YUBU9.js" defer></script>
+<script src="/js/main.js"></script>
+<script>
+    function openChatbot() {
+        window.botpressWebChat.open();
+    }
+</script>
+  </div>
+</body>
+</html>
+  

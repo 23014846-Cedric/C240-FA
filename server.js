@@ -134,10 +134,10 @@ app.get("/task-management", (req, res) => {
 app.get("/build", (req, res) => {
   res.render("build"); // renders views/build.ejs
 });
-app.get("/investing", (req, res) => res.render("investing"));
-app.get("/budgeting", (req, res) => res.render("budgeting"));
-app.get("/careers", (req, res) => res.render("careers"));
-app.get("/interviews", (req, res) => res.render("interviews"));
+app.get("/investing", (req, res) => res.render("investing", { title: "Investing", activeModule: "investing" }));
+app.get("/budgeting", (req, res) => res.render("budgeting", { title: "Budgeting", activeModule: "budgeting" }));
+app.get("/careers", (req, res) => res.render("careers", { title: "Careers", activeModule: "careers" }));
+app.get("/interviews", (req, res) => res.render("interviews", { title: "Interviews", activeModule: "interviews" }));
 app.get("/prioritization", (req, res) => {
   // If your prioritization page IS your task manager, render index instead:
   const sortedTasks = sortTasks([...tasks]);
@@ -347,6 +347,36 @@ app.get("/n8n-chatbot", async (req, res) => {
   }
 });
 
+// API Routes for AI Agent Modules
+app.post('/api/finance/process', (req, res) => {
+    // Finance tracking logic would go here
+    res.json({ status: 'success', message: 'Finance data processed' });
+});
+
+app.post('/api/investing/analyze', (req, res) => {
+    // Investing coaching logic would go here
+    res.json({ status: 'success', message: 'Investment analysis complete' });
+});
+
+app.post('/api/career/map', (req, res) => {
+    // Career mapping logic would go here
+    res.json({ status: 'success', message: 'Career path generated' });
+});
+
+app.post('/api/interview/prepare', (req, res) => {
+    // Interview preparation logic would go here
+    res.json({ status: 'success', message: 'Interview prep materials ready' });
+});
+
+app.post('/api/tasks/prioritize', (req, res) => {
+    // Task prioritization logic would go here
+    res.json({ status: 'success', message: 'Tasks prioritized' });
+});
+
+app.post('/api/meetings/summarize', (req, res) => {
+    // Meeting follow-up logic would go here
+    res.json({ status: 'success', message: 'Meeting summary created' });
+});
 /* =========================
    START SERVER
 ========================= */
